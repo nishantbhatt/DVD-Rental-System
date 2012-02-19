@@ -4,6 +4,7 @@ import iodvd.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
@@ -188,7 +189,7 @@ class AdminSession extends StandardSession implements pSession {
 		/* check if removing the added DVDs */
 		if (added_dvds.containsKey(title))
 			added_dvds.remove(title);
-
+		
 		/* add DVD title to list of removed DVDs */
 		removed_dvds.add(title);
 		/* remove the DVD title from master DVD collection */
@@ -205,7 +206,19 @@ class AdminSession extends StandardSession implements pSession {
 					SessionErrors.TRANSACTIONS_NOT_ALLOWED);
 		super._buy(title, quantity, false);
 	}
-
+	
+	@Override
+	public void writeTransactionFile() throws IOException{
+		/* removing pending transaction */
+		Iterator<DVDTransaction> transac_iter = transactions.iterator();
+		while(transac_iter.hasNext()) {
+			if(removed_dvds.contains(transac_iter.next().getDvd_title()))
+				transac_iter.remove();
+		}
+		
+		super.writeTransactionFile();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
