@@ -192,8 +192,6 @@ class AdminSession extends StandardSession implements pSession {
 		
 		/* add DVD title to list of removed DVDs */
 		removed_dvds.add(title);
-		/* remove the DVD title from master DVD collection */
-		this.dvd_collection.remove(title);
 		/* add to transactions */
 		transactions.add(new DVDTransaction(TransactionID.REMOVE, title, cdvd
 				.getCount(), cdvd.getStatus(), cdvd.getPrice()));
@@ -212,7 +210,8 @@ class AdminSession extends StandardSession implements pSession {
 		/* removing pending transaction */
 		Iterator<DVDTransaction> transac_iter = transactions.iterator();
 		while(transac_iter.hasNext()) {
-			if(removed_dvds.contains(transac_iter.next().getDvd_title()))
+			DVDTransaction tr = transac_iter.next();
+			if(removed_dvds.contains(tr.getDvd_title()) && tr.getTrans_id() != TransactionID.REMOVE)
 				transac_iter.remove();
 		}
 		
