@@ -10,6 +10,7 @@ import utilsdvd.GlobalFiles;
  * This class provides command-line user interface to DVD Rental System. This
  * class is responsible for taking user inputs and performing desired actions.
  * 
+ * 
  * @author 100413064 (Shivam Kalra), 100400174 (Nishant Bhatt)
  */
 public class DVDRentalSystem {
@@ -22,7 +23,7 @@ public class DVDRentalSystem {
 	 * Session manager object.
 	 */
 	private static iSession session = null;
-
+//testing github sync...testing 123
 	/**
 	 * Scanner object to take user inputs.
 	 */
