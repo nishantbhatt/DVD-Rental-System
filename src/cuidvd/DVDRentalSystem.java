@@ -7,7 +7,7 @@ import sessiondvd.*;
 import utilsdvd.GlobalFiles;
 
 /**
- * This class provided command-line user interface to DVD Rental System. This
+ * This class provides command-line user interface to DVD Rental System. This
  * class is responsible for taking user inputs and performing desired actions.
  * 
  * @author 100413064 (Shivam Kalra), 100400174 (Nishant Bhatt)
