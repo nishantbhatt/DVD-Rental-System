@@ -1,0 +1,9 @@
+Enter command: 
+Session type (standard or admin): 
+Login accepted.
+Enter command:
+DVD title: 
+Number of copies: 
+Error: DVD title must be at most 25 characters long.
+Enter command: 
+Session closed.
