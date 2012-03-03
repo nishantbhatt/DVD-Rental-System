@@ -77,8 +77,10 @@ public class DVDRentalSystem {
 				else if (_next.equalsIgnoreCase("create"))
 					create_m();
 				else if (_next.equalsIgnoreCase("logout")) {
-					session.logout();
-					System.out.println("Session closed.");
+					if(session.isRunning()) {
+						session.logout();
+						System.out.println("Session closed.");
+					}
 					break;
 				} else
 					throw new Exception("Invalid command.");
