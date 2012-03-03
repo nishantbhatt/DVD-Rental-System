@@ -78,10 +78,6 @@ public class DVDRentalSystem {
 				else if (_next.equalsIgnoreCase("logout")) {
 					session.logout();
 					System.out.println("Session closed.");
-				} else if (_next.equalsIgnoreCase("quit")) {
-					if (session.isRunning())
-						throw new Exception(
-								"Cannot quit in middle of running session.");
 					break;
 				} else
 					throw new Exception("Invalid command.");
