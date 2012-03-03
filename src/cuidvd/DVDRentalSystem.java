@@ -302,21 +302,9 @@ public class DVDRentalSystem {
 		System.out.print("Number of copies: ");
 		String copies_count_s = s_in.next();
 
-		System.out.print("User Confirmation (yes/no): ");
-		String _confirmation = s_in.next();
-		_confirmation = _confirmation.trim();
-
-		if (_confirmation.equalsIgnoreCase("no")) {
-			System.out.println("Action is cancelled.");
-			return;
-		}
-
 		if (title.isEmpty())
 			throw new IllegalArgumentException(INVALID_INPUT.replaceFirst(
 					"\\{1\\}", "Title"));
-		if (!_confirmation.equalsIgnoreCase("yes"))
-			throw new IllegalArgumentException(INVALID_INPUT.replaceFirst(
-					"\\{1\\}", "Sale Confirmation"));
 
 		int quantity;
 		try {
@@ -325,6 +313,22 @@ public class DVDRentalSystem {
 			throw new IllegalArgumentException(INVALID_INPUT.replaceFirst(
 					"\\{1\\}", "Number of Copies"));
 		}
+		
+		double price = session.getDVDPrice(title);
+		System.out.println("Single DVD Price: " + price);
+		System.out.println("Total Price: " + price * quantity);
+		System.out.print("User Confirmation (yes/no): ");
+		String _confirmation = s_in.next();
+		_confirmation = _confirmation.trim();
+
+		if (_confirmation.equalsIgnoreCase("no")) {
+			System.out.println("Action is cancelled.");
+			return;
+		}
+		
+		if (!_confirmation.equalsIgnoreCase("yes"))
+			throw new IllegalArgumentException(INVALID_INPUT.replaceFirst(
+					"\\{1\\}", "Sale Confirmation"));
 
 		session.buy(title, quantity);
 		System.out.println("Brought successfully.");

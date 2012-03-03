@@ -104,6 +104,20 @@ public class SessionManager implements iSession {
 
 		current_session.rent(title, quantity);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see sessiondvd.sSession#rent(java.lang.String, int)
+	 */
+	@Override
+	public double getDVDPrice(String title) {
+		if (current_session == null)
+			throw new IllegalArgumentException(SessionErrors.SESSION_NOT_OPEN);
+
+		return ((StandardSession)current_session).getDVDPrice(title);
+	}	/*
+
 
 	/*
 	 * (non-Javadoc)

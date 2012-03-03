@@ -1,3 +1,5 @@
 Enter command: Session type (standard or admin): Login accepted.
-Enter command: DVD title: Number of copies: User Confirmation (yes/no): Error: DVD title does not exists in inventory.
+Enter command: DVD title: Number of copies: Single DVD Price: 797.61
+Total Price: 4785.66
+User Confirmation (yes/no): Error: Number of copies exceeding maximum limit of 5
 Enter command: Session closed.

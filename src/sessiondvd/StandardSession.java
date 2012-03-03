@@ -69,6 +69,23 @@ class StandardSession implements sSession {
 			dvd_collection.put(cdvd.getTitle(), cdvd);
 	}
 
+	/**
+	 * Get price of the DVD.
+	 * 
+	 * @param title
+	 *            Title of the DVD.
+	 * @return Price of the DVD.
+	 */
+	public double getDVDPrice(String title) {
+		/* title does not exist */
+		if(!dvd_collection.containsKey(title))
+			throw new IllegalArgumentException(SessionErrors.DVD_NOT_FOUND);
+		if(dvd_collection.get(title).getStatus() != DVDStatus.SALE)
+			throw new IllegalArgumentException(SessionErrors.DVD_NOT_FOR_SALE);
+		
+		return dvd_collection.get(title).getPrice();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

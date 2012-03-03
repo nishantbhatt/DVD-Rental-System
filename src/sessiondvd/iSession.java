@@ -40,4 +40,10 @@ public interface iSession extends pSession, sSession {
 	 */
 	public boolean isRunning();
 
+	/**
+	 * Return Price of the DVD.
+	 * @param title Title of the DVD.
+	 * @return Price of the DVD.
+	 */
+	double getDVDPrice(String title);
 }
