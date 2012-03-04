@@ -1,1 +1,1 @@
-Test that returned DVDs have been added to inventory.
+Test that atmost 3 copies can be returned in one transaction.
