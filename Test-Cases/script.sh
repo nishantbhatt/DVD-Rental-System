@@ -16,3 +16,5 @@ run_test() {
 }
 
 run_test Standard-Test-Set
+chdir ..
+run_test Admin-Test-Set
