@@ -70,15 +70,6 @@ Test()
  java -jar ../dvdrental.jar \"../dvds.txt\" \"./$1/Actual-Output/$2.tf\" < ./$1/Input/$2.in > ./$1/Actual-Output/$2.out 2>&1
  echo ""
  #-------------------------------------------------------------------------------
- 
- if [ $? -ne 0 ]; then
-  echo "*** ERROR found while running JAVA command."
-  echo "Make sure that all *.in files are in correct format."
-  echo "Error details are below: "
-  echo `cat ./$1/Actual-Output/$2.out`
-  echo ""
-  return 0;
- fi
 
  NO_ERROR=0
  #-------------------------------------------------------------------------------
@@ -94,31 +85,32 @@ Test()
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
- result_transc=$(diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf 2>&1)				
+ if [ -e ./$1/Actual-Output/$2.tf ]; then
+  result_transc=$(diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf 2>&1)
   if [ -n "$result_transc" ]; then
    echo "*** ERROR found while comparing expected and actual transaction files. ***"
    echo "Difference between actual transaction file and expected transaction file is below:"
    echo $result_transc
    NO_ERROR=1
+  fi
+  echo ""
  fi
- echo ""
  #-------------------------------------------------------------------------------
  
  if [ "$NO_ERROR" -eq 0 ]; then
-  echo "*** Test Successful. No errors found in the test."
-  echo "Transaction File"
-  echo "----------------"
+  echo "*** SUCCESS. No error(s) were found in execution of the test."
+  echo ""
+  echo "Transaction File: "
   echo `cat ./$1/Actual-Output/$2.tf`
   echo ""
-  echo "Output"
-  echo "------"
+  echo "Output: "
   echo `cat ./$1/Actual-Output/$2.out`
   echo ""
  fi
 }
 
 run_test() {
- chdir $1
+ cd $1
  echo ""
  echo ""
  for d in *; do
@@ -126,10 +118,12 @@ run_test() {
    echo ""
    x=1;
    while [ -f ./$d/Input/$x.in ]; do
+    f
     echo "*-----------------------------------*"
+    echo "Test Identity: ${1:0:1}-${d^^}-$x"
     echo "Test Set: $1"
     echo "Functionality: $d"
-    echo "Test Number: $2"
+    echo "Test Number: $x"
     echo "*-----------------------------------*"
     Test $d $x
     echo ""
@@ -165,9 +159,9 @@ while true
  do
   case "$1" in
    -h) usage "HELP";            shift;; # Help requested
-   -a) $TEST=0;            shift;;
-   -s) $TEST=1;            shift;;
-   -b) $TEST=2;            shift;;
+   -a) TEST=0;            shift;;
+   -s) TEST=1;            shift;;
+   -b) TEST=2;            shift;;
    --) shift ; break ;; 
    *) echo "Internal error!" ; exit 1 ;;
   esac
@@ -184,7 +178,7 @@ case $TEST in
  0) run_test "Admin-Test-Set" ;;
  1) run_test "Standard-Test-Set" ;;
  2) run_test "Admin-Test-Set"
-    chdir..
+    cd ..
     run_test "Standard-Test-Set";;
  *) echo "Internal error!"; exit 1 ;;
 esac
