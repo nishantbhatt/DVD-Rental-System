@@ -41,6 +41,7 @@ public class DVDRentalSystem {
 		if (args.length != 2) {
 			System.out
 					.println("Transaction file and Current DVD file is not provided as command line arguments.");
+			System.exit(1);
 			return;
 		}
 
@@ -87,6 +88,7 @@ public class DVDRentalSystem {
 
 			} catch (Exception ex) {
 				System.err.println("Error: " + ex.getMessage());
+				System.exit(1);
 			}
 		}
 	}
