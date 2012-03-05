@@ -26,6 +26,7 @@
 #    LOGIN during ADMIN session, use following script:
 #
 #    bash script.bash -a -f "(return|buy|login)"
+# 5) To output only failed test you can set -e flag.
 #
 ###############################################################################
 
@@ -40,6 +41,7 @@ usage()
  echo "       -a = test admin functionalities"
  echo "       -s = test standard functionalities"
  echo "       -f = To invoke tests on certain functionalities"
+ echo "       -e = To output only failed tests"
  echo "EXAMPLES:"
  echo "All admin tests: "
  echo "       bash $CALLER -a"
@@ -110,8 +112,8 @@ Test()
    echo "Difference between actual transaction file and expected transaction file is below:"
    echo $result_transc
    NO_ERROR=1
+   echo ""
   fi
-  echo ""
  fi
  #-------------------------------------------------------------------------------
  
@@ -132,26 +134,35 @@ Test()
   fi
   echo ""
  fi
+ return $NO_ERROR
 }
 
 run_test() {
  cd $1
- echo ""
- echo ""
  for d in *; do
   if [ -d ./$d ]; then
    if [[ $d =~ $REGEX ]]; then
-    echo ""
     x=1;
     while [ -f ./$d/Input/$x.in ]; do
-     echo "*-----------------------------------*"
-     echo "Test Identity: ${1:0:1}-${d^^}-$x"
-     echo "Test Set: $1"
-     echo "Functionality: $d"
-     echo "Test Number: $x"
-     echo "*-----------------------------------*"
-     Test $d $x
-     echo ""
+     TOTAL_TESTS=$(( $TOTAL_TESTS + 1))
+     output=`Test $d $x`
+     if [ "$?" -eq 1 ]; then
+      FAILED_TESTS=$(( $FAILED_TESTS + 1))
+      fail="yes"
+     else
+      fail="no"
+     fi
+     if [ "$fail" == "yes" -o "$ERROR" == "no" ]; then
+      echo ""
+      echo "------------------------------------"
+      echo "Test Identity: ${1:0:1}-${d^^}-$x"
+      echo "Test Set: $1"
+      echo "Functionality: $d"
+      echo "Test Number: $x"
+      echo "------------------------------------"
+      echo "$output"
+      echo ""
+     fi
      x=$(( $x + 1 ))
     done
    fi
@@ -174,13 +185,17 @@ SILENT="no"	                        # User wants prompts
 AFLAG="no"
 SFLAG="no"
 REGEX=".*"
+ERROR="no"
+FAILED_TESTS=0
+TOTAL_TESTS=0
 
-while getopts hasf: opt
+while getopts ehasf: opt
  do
   case $opt in
    h) usage "HELP" ;;
    a) AFLAG="yes" ;;
    s) SFLAG="yes" ;;
+   e) ERROR="yes" ;;
    f) REGEX="$OPTARG"
       if [ "$REGEX" == "" ]; then
        REGEX=".*"
@@ -192,9 +207,8 @@ done
 
 echo "Subject: DVD-Rental-System V 1.0, Front-End-Part Testing"
 dateTest=`date`
-echo ""
 echo "Begin testing at: $dateTest"
-echo "..."
+echo "************************************************************"
 
 if [ "$AFLAG" != "yes" -a "$SFLAG" != "yes" ]; then
  AFLAG="yes"
@@ -213,8 +227,9 @@ if [ "$SFLAG" = "yes" ]; then
  cd ..
 fi
 
-echo "..."
-echo "Subject: DVD-Rental-System V 1.0, Front-End-Part Testing"
+echo "************************************************************"
+echo "Total tests:  $TOTAL_TESTS"
+echo "Failed tests: $FAILED_TESTS"
 dateTest=`date`
 echo "End testing at: $dateTest"
 
