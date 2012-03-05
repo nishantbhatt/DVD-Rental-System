@@ -8,16 +8,24 @@
 #
 # Notes:
 # 1) To invoke this shell script and redirect standard output and
-#    standard error to a file (such as Test-Output.txt) do the
-#    following (the -s flag is "silent mode" to avoid prompts to the
-#    user):
+#    standard error to a file (such as result.txt) do the
+#    following (the -b flag is test both Admin and Standard test)
 #
-#    ./test-bucket-1  -s  2>&1  | tee test-bucket-1.out
+#    bash script.bash -b  2>&1  | tee result.out
+# 2) To check the tests that failed, search for "*** ERROR" keyword
+#    in the output file.
+# 3) Every test has a code associated with it, for example
+#    
+#    S-RETURN-04
 #
-# Return codes:
-#  0 = All commands were successful
-#  1 = At least one command failed, see the output file and search
-#      for the keyword "ERROR".
+#    This uniquely identifies a test. This means that test checks the
+#    RETURN functionality in Standard session and a number 04 represents
+#    a test number.
+# 4) To perform test on certain functionalities, you can set argument
+#    -f as regex matching that test. For example, you test RETURN, BUY and
+#    LOGIN during ADMIN session, use following script:
+#
+#    bash script.bash -a -f "(return|buy|login)"
 #
 ###############################################################################
 
@@ -31,10 +39,20 @@ usage()
  echo "WHERE: -h = help       "
  echo "       -a = test admin functionalities"
  echo "       -s = test standard functionalities"
- echo "       -b = test both the functionalities"
-
- echo "PREREQUISITES:"
- echo "* None."
+ echo "       -f = To invoke tests on certain functionalities"
+ echo "EXAMPLES:"
+ echo "All admin tests: "
+ echo "       bash $CALLER -a"
+ echo ""
+ echo "All standard tests:"
+ echo "       bash $CALLER -s"
+ echo ""
+ echo "All tests related to buy transaction: "
+ echo "       bash $CALLER -f buy"
+ echo ""
+ echo "All admin tests related to buy and return transaction: "
+ echo "       bash $CALLER -a -f \"(buy|return)\""
+ echo ""
  echo "$CALLER: exiting now with rc=1."
  exit 1
 }
@@ -100,11 +118,18 @@ Test()
  if [ "$NO_ERROR" -eq 0 ]; then
   echo "*** SUCCESS. No error(s) were found in execution of the test."
   echo ""
-  echo "Transaction File: "
-  echo `cat ./$1/Actual-Output/$2.tf`
+  echo "Input: "
+  echo `cat ./$1/Input/$2.in`
   echo ""
   echo "Output: "
   echo `cat ./$1/Actual-Output/$2.out`
+  echo ""
+  echo "Transaction File: "
+  if [ -e ./$1/Actual-Output/$2.tf ]; then
+   echo `cat ./$1/Actual-Output/$2.tf`
+  else
+   echo "Test did not create any transaction file."
+  fi
   echo ""
  fi
 }
@@ -115,20 +140,21 @@ run_test() {
  echo ""
  for d in *; do
   if [ -d ./$d ]; then
-   echo ""
-   x=1;
-   while [ -f ./$d/Input/$x.in ]; do
-    f
-    echo "*-----------------------------------*"
-    echo "Test Identity: ${1:0:1}-${d^^}-$x"
-    echo "Test Set: $1"
-    echo "Functionality: $d"
-    echo "Test Number: $x"
-    echo "*-----------------------------------*"
-    Test $d $x
+   if [[ $d =~ $REGEX ]]; then
     echo ""
-    x=$(( $x + 1 ))
-   done
+    x=1;
+    while [ -f ./$d/Input/$x.in ]; do
+     echo "*-----------------------------------*"
+     echo "Test Identity: ${1:0:1}-${d^^}-$x"
+     echo "Test Set: $1"
+     echo "Functionality: $d"
+     echo "Test Number: $x"
+     echo "*-----------------------------------*"
+     Test $d $x
+     echo ""
+     x=$(( $x + 1 ))
+    done
+   fi
   fi
  done
 }
@@ -145,28 +171,24 @@ SILENT="no"	                        # User wants prompts
 # ----------------------------------
 # Handle keyword parameters (flags).
 # ----------------------------------
-TEMP=`getopt hbas $*`
-if [ $? != 0 ]
-then
- echo "$CALLER: Unknown flag(s)"
- usage
-fi
+AFLAG="no"
+SFLAG="no"
+REGEX=".*"
 
-eval set -- "$TEMP"
-
-TEST=2;
-while true                   
+while getopts hasf: opt
  do
-  case "$1" in
-   -h) usage "HELP";            shift;; # Help requested
-   -a) TEST=0;            shift;;
-   -s) TEST=1;            shift;;
-   -b) TEST=2;            shift;;
-   --) shift ; break ;; 
-   *) echo "Internal error!" ; exit 1 ;;
+  case $opt in
+   h) usage "HELP" ;;
+   a) AFLAG="yes" ;;
+   s) SFLAG="yes" ;;
+   f) REGEX="$OPTARG"
+      if [ "$REGEX" == "" ]; then
+       REGEX=".*"
+      fi ;;
+   ?) echo "Run 'bash $CALLER -h' to see all the available command line options."
+      exit 1;;
   esac
 done
-
 
 echo "Subject: DVD-Rental-System V 1.0, Front-End-Part Testing"
 dateTest=`date`
@@ -174,14 +196,22 @@ echo ""
 echo "Begin testing at: $dateTest"
 echo "..."
 
-case $TEST in
- 0) run_test "Admin-Test-Set" ;;
- 1) run_test "Standard-Test-Set" ;;
- 2) run_test "Admin-Test-Set"
-    cd ..
-    run_test "Standard-Test-Set";;
- *) echo "Internal error!"; exit 1 ;;
-esac
+if [ "$AFLAG" != "yes" -a "$SFLAG" != "yes" ]; then
+ AFLAG="yes"
+ SFLAG="yes"
+fi
+
+shopt -s nocasematch;
+
+if [ "$AFLAG" == "yes" ]; then
+ run_test "Admin-Test-Set"
+ cd ..
+fi
+
+if [ "$SFLAG" = "yes" ]; then
+ run_test "Standard-Test-Set"
+ cd ..
+fi
 
 echo "..."
 echo "Subject: DVD-Rental-System V 1.0, Front-End-Part Testing"
