@@ -86,7 +86,7 @@ public class DVDRentalSystem {
 					throw new Exception("Invalid command.");
 
 			} catch (Exception ex) {
-				System.out.println("Error: " + ex.getMessage());
+				System.err.println("Error: " + ex.getMessage());
 			}
 		}
 	}
