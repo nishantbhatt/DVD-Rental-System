@@ -17,10 +17,6 @@ import java.util.zip.DataFormatException;
 class AdminSession extends StandardSession implements pSession {
 
 	/**
-	 * Maximum number of copies of a DVD.
-	 */
-	private static int CREATE_COPIES_LIMIT = 999;
-	/**
 	 * Maximum price for a DVD.
 	 */
 	private static double DVD_PRICE_LIMIT = 150.00;
