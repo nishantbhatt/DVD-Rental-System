@@ -93,7 +93,7 @@ terminate()
 Test()
 {
  #----------------------------------------------------------------------------
- echo `cat ./$1/Info/$2.info`
+ echo "`cat ./$1/Info/$2.info` [$3]"
  echo ""
  #------------------------------------------------------------------------------
 
@@ -107,11 +107,11 @@ Test()
  NO_ERROR=0
  #-------------------------------------------------------------------------------
  echo "Checking results..."
- result_output=$(diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out 2>&1)		
- if [ -n "$result_otuput" ]; then
-  echo "*** ERROR found while comparing output for test ($3). ***"
+ result_output=$((diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out) 2>&1)
+ if [ -n "${result_output}" ]; then
+  echo "*** ERROR found while comparing output for test [$3]. ***"
   echo "Difference between actual output and expected output is below:"
-  echo $result_output
+  echo "$result_output"
   NO_ERROR=1
   echo ""
  fi
@@ -119,11 +119,11 @@ Test()
 
 #---------------------------------------------------------------------------------
  if [ -e ./$1/Output-TF/$2.tf ]; then
-  result_transc=$(diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf 2>&1)
-  if [ -n "$result_transc" ]; then
-   echo "*** ERROR found while comparing transaction file for test ($3). ***"
+  result_transc=$((diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf) 2>&1)
+  if [ -n "${result_transc}" ]; then
+   echo "*** ERROR found while comparing transaction file for test [$3]. ***"
    echo "Difference between actual transaction file and expected transaction file is below:"
-   echo $result_transc
+   echo "$result_transc"
    NO_ERROR=1
    echo ""
   fi
@@ -131,7 +131,7 @@ Test()
  #-------------------------------------------------------------------------------
  
  if [ "$NO_ERROR" -eq 0 ]; then
-  echo "*** SUCCESS. No error(s) were found in execution of the test ($3)."
+  echo "*** SUCCESS. No error(s) were found in execution of the test [$3]."
   echo ""
   echo "Input: "
   echo "`cat ./$1/Input/$2.in`"
@@ -159,7 +159,7 @@ run_test() {
     while [ -f ./$d/Input/$x.in ]; do
      identity=${1:0:1}-${d^^}-$x
      TOTAL_TESTS=$(( $TOTAL_TESTS + 1))
-     output=`Test $d $x $identity`
+     output=$((Test $d $x $identity) 2>&1)
      if [ "$?" -eq 1 ]; then
       FAILED_TESTS=$(( $FAILED_TESTS + 1))
       fail="yes"
