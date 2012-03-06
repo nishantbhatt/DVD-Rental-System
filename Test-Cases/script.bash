@@ -138,14 +138,19 @@ Test()
   echo "Input: "
   echo "`cat ./$1/Input/$2.in`"
   echo ""
-  echo "Output: "
+  echo "Actual Output: "
   echo "`cat ./$1/Actual-Output/$2.out`"
   echo ""
+  if [ "$NO_ERROR" -eq 0 ]; then
+   echo "Expected Output: "
+   echo "`cat ./$1/Output/$2.out`"
+   echo ""
+  fi
   echo "Transaction File: "
   if [ -e ./$1/Output-TF/$2.tf ]; then
    echo "`cat ./$1/Actual-Output/$2.tf`"
   else
-   echo "Test did not create any transaction file."
+   echo "Test should not create any transaction file."
   fi
  return $NO_ERROR
 }
