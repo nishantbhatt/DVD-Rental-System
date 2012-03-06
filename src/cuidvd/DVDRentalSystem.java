@@ -23,7 +23,7 @@ public class DVDRentalSystem {
 	 * Session manager object.
 	 */
 	private static iSession session = null;
-//testing github sync...testing 123
+	//testing github sync...testing 123
 	/**
 	 * Scanner object to take user inputs.
 	 */
@@ -50,6 +50,7 @@ public class DVDRentalSystem {
 
 		s_in = new Scanner(System.in);
 
+		boolean _error = false;
 		String _next;
 
 		while (true) {
@@ -88,9 +89,11 @@ public class DVDRentalSystem {
 
 			} catch (Exception ex) {
 				System.err.println("Error: " + ex.getMessage());
-				System.exit(1);
+				_error = true;
 			}
 		}
+		if(_error)
+			System.exit(1);
 	}
 
 	/**
