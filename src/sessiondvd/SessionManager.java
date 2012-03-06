@@ -154,8 +154,7 @@ public class SessionManager implements iSession {
 	public void login(SessionType stype) throws IOException,
 			DataFormatException {
 		if (current_session != null)
-			throw new IllegalArgumentException(
-					SessionErrors.ONE_LOGIN_PER_SESSION);
+			throw new IllegalArgumentException(SessionErrors.ONE_LOGIN_PER_SESSION);
 
 		switch (stype) {
 		case ADMIN:

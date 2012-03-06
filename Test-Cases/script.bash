@@ -86,8 +86,8 @@ Test()
 
  #-------------------------------------------------------------------------------
  echo "Running java command..."
- echo "java -jar ../dvdrental.jar \"../dvds.txt\" \"./$1/Actual-Output/$2.tf\""
- java -jar ../dvdrental.jar \"../dvds.txt\" \"./$1/Actual-Output/$2.tf\" < ./$1/Input/$2.in > ./$1/Actual-Output/$2.out 2>&1
+ echo "java -jar ../dvdrental.jar ../dvds.txt ./$1/Actual-Output/$2.tf"
+ java -jar ../dvdrental.jar ../dvds.txt ./$1/Actual-Output/$2.tf < ./$1/Input/$2.in > ./$1/Actual-Output/$2.out 2>&1
  echo ""
  #-------------------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ Test()
  echo "Checking results..."
  result_output=$(diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out 2>&1)		
  if [ -n "$result_otuput" ]; then
-  echo "*** ERROR found while comparing expected and actual outputs. ***"
+  echo "*** ERROR found while comparing output for test ($3). ***"
   echo "Difference between actual output and expected output is below:"
   echo $result_output
   NO_ERROR=1
@@ -105,10 +105,10 @@ Test()
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
- if [ -e ./$1/Actual-Output/$2.tf ]; then
+ if [ -e ./$1/Output-TF/$2.tf ]; then
   result_transc=$(diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf 2>&1)
   if [ -n "$result_transc" ]; then
-   echo "*** ERROR found while comparing expected and actual transaction files. ***"
+   echo "*** ERROR found while comparing transaction file for test ($3). ***"
    echo "Difference between actual transaction file and expected transaction file is below:"
    echo $result_transc
    NO_ERROR=1
@@ -118,7 +118,7 @@ Test()
  #-------------------------------------------------------------------------------
  
  if [ "$NO_ERROR" -eq 0 ]; then
-  echo "*** SUCCESS. No error(s) were found in execution of the test."
+  echo "*** SUCCESS. No error(s) were found in execution of the test ($3)."
   echo ""
   echo "Input: "
   echo `cat ./$1/Input/$2.in`
@@ -127,7 +127,7 @@ Test()
   echo `cat ./$1/Actual-Output/$2.out`
   echo ""
   echo "Transaction File: "
-  if [ -e ./$1/Actual-Output/$2.tf ]; then
+  if [ -e ./$1/Output-TF/$2.tf ]; then
    echo `cat ./$1/Actual-Output/$2.tf`
   else
    echo "Test did not create any transaction file."
@@ -144,8 +144,9 @@ run_test() {
    if [[ $d =~ $REGEX ]]; then
     x=1;
     while [ -f ./$d/Input/$x.in ]; do
+     identity=${1:0:1}-${d^^}-$x
      TOTAL_TESTS=$(( $TOTAL_TESTS + 1))
-     output=`Test $d $x`
+     output=`Test $d $x $identity`
      if [ "$?" -eq 1 ]; then
       FAILED_TESTS=$(( $FAILED_TESTS + 1))
       fail="yes"
@@ -155,7 +156,7 @@ run_test() {
      if [ "$fail" == "yes" -o "$ERROR" == "no" ]; then
       echo ""
       echo "------------------------------------"
-      echo "Test Identity: ${1:0:1}-${d^^}-$x"
+      echo "Test Identity: $identity"
       echo "Test Set: $1"
       echo "Functionality: $d"
       echo "Test Number: $x"
