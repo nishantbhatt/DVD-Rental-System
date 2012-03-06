@@ -1,1 +1,1 @@
-Purpose: Test that no more than 3 copies of same tile are rented by standard user.
+Purpose: Test that no more than 3 copies are rented in one transaction.

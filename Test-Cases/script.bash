@@ -9,11 +9,17 @@
 # Notes:
 # 1) To invoke this shell script and redirect standard output and
 #    standard error to a file (such as result.txt) do the
-#    following (the -b flag is test both Admin and Standard test)
+#    following
 #
-#    bash script.bash -b  2>&1  | tee result.out
+#    bash script.bash  2>&1  | tee result.out
+#
 # 2) To check the tests that failed, search for "*** ERROR" keyword
 #    in the output file.
+#    or
+#    Use -e flag to print only those tests that failed:
+#    
+#    bash script.bash -e
+#
 # 3) Every test has a code associated with it, for example
 #    
 #    S-RETURN-04
@@ -21,12 +27,19 @@
 #    This uniquely identifies a test. This means that test checks the
 #    RETURN functionality in Standard session and a number 04 represents
 #    a test number.
-# 4) To perform test on certain functionalities, you can set argument
+#
+# 4) To check if a test identified by A-SELL-2 failed, you can use grep
+#    in list of failed tests, for example:
+#    
+#    bash script.bash -ae | grep "A-SELL-2"
+#
+# 5) To perform test on certain functionalities, you can set argument
 #    -f as regex matching that test. For example, you test RETURN, BUY and
 #    LOGIN during ADMIN session, use following script:
 #
 #    bash script.bash -a -f "(return|buy|login)"
-# 5) To output only failed test you can set -e flag.
+#
+# 6) To output only failed test you can set -e flag.
 #
 ###############################################################################
 
@@ -80,7 +93,7 @@ terminate()
 Test()
 {
  #----------------------------------------------------------------------------
- echo `cat ./$1/Info/$2.info`
+ echo "`cat ./$1/Info/$2.info` [$3]"
  echo ""
  #------------------------------------------------------------------------------
 
@@ -94,11 +107,11 @@ Test()
  NO_ERROR=0
  #-------------------------------------------------------------------------------
  echo "Checking results..."
- result_output=$(diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out 2>&1)		
- if [ -n "$result_otuput" ]; then
-  echo "*** ERROR found while comparing output for test ($3). ***"
+ result_output=$((diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out) 2>&1)
+ if [ -n "${result_output}" ]; then
+  echo "*** ERROR found while comparing output for test [$3]. ***"
   echo "Difference between actual output and expected output is below:"
-  echo $result_output
+  echo "$result_output"
   NO_ERROR=1
   echo ""
  fi
@@ -106,11 +119,11 @@ Test()
 
 #---------------------------------------------------------------------------------
  if [ -e ./$1/Output-TF/$2.tf ]; then
-  result_transc=$(diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf 2>&1)
-  if [ -n "$result_transc" ]; then
-   echo "*** ERROR found while comparing transaction file for test ($3). ***"
+  result_transc=$((diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf) 2>&1)
+  if [ -n "${result_transc}" ]; then
+   echo "*** ERROR found while comparing transaction file for test [$3]. ***"
    echo "Difference between actual transaction file and expected transaction file is below:"
-   echo $result_transc
+   echo "$result_transc"
    NO_ERROR=1
    echo ""
   fi
@@ -118,8 +131,10 @@ Test()
  #-------------------------------------------------------------------------------
  
  if [ "$NO_ERROR" -eq 0 ]; then
-  echo "*** SUCCESS. No error(s) were found in execution of the test ($3)."
+  echo "*** SUCCESS. No error(s) were found in execution of the test [$3]."
   echo ""
+ fi
+  
   echo "Input: "
   echo "`cat ./$1/Input/$2.in`"
   echo ""
@@ -132,8 +147,6 @@ Test()
   else
    echo "Test did not create any transaction file."
   fi
-  echo ""
- fi
  return $NO_ERROR
 }
 
@@ -146,7 +159,7 @@ run_test() {
     while [ -f ./$d/Input/$x.in ]; do
      identity=${1:0:1}-${d^^}-$x
      TOTAL_TESTS=$(( $TOTAL_TESTS + 1))
-     output=`Test $d $x $identity`
+     output=$((Test $d $x $identity) 2>&1)
      if [ "$?" -eq 1 ]; then
       FAILED_TESTS=$(( $FAILED_TESTS + 1))
       fail="yes"

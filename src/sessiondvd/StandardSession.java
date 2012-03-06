@@ -25,6 +25,11 @@ import iodvd.*;
 class StandardSession implements sSession {
 
 	/**
+	 * Maximum number of copies of a DVD.
+	 */
+	protected static int CREATE_COPIES_LIMIT = 999;
+
+	/**
 	 * Copies limit for renting a DVD.
 	 */
 	private static int RENT_COPIES_LIMIT = 3;
@@ -78,11 +83,11 @@ class StandardSession implements sSession {
 	 */
 	public double getDVDPrice(String title) {
 		/* title does not exist */
-		if(!dvd_collection.containsKey(title))
+		if (!dvd_collection.containsKey(title))
 			throw new IllegalArgumentException(SessionErrors.DVD_NOT_FOUND);
-		if(dvd_collection.get(title).getStatus() != DVDStatus.SALE)
+		if (dvd_collection.get(title).getStatus() != DVDStatus.SALE)
 			throw new IllegalArgumentException(SessionErrors.DVD_NOT_FOR_SALE);
-		
+
 		return dvd_collection.get(title).getPrice();
 	}
 
@@ -138,8 +143,10 @@ class StandardSession implements sSession {
 			throw new IllegalArgumentException(
 					SessionErrors.EXCEEDING_DVD_QUANTITY.replaceAll("\\{1\\}",
 							"" + RENT_COPIES_LIMIT));
-		if (cdvd.getCount() < quantity)
-			throw new IllegalArgumentException(SessionErrors.NOT_ENOUGH_DVDS);
+		if (cdvd.getCount() + quantity > StandardSession.CREATE_COPIES_LIMIT)
+			throw new IllegalArgumentException(
+					SessionErrors.EXCEEDING_DVD_QUANTITY.replaceAll("\\{1\\}",
+							"" + CREATE_COPIES_LIMIT));
 
 		/* add rented quantity to total */
 		cdvd.setCount(cdvd.getCount() + quantity);

@@ -1,1 +1,1 @@
-Purpose: Test that DVD is rented only if enough DVD copies are available.
+Purpose: Test that copies of DVD are subtracted from available copies after every RENT transaction.
