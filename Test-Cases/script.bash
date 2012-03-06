@@ -133,6 +133,8 @@ Test()
  if [ "$NO_ERROR" -eq 0 ]; then
   echo "*** SUCCESS. No error(s) were found in execution of the test [$3]."
   echo ""
+ fi
+  
   echo "Input: "
   echo "`cat ./$1/Input/$2.in`"
   echo ""
@@ -145,8 +147,6 @@ Test()
   else
    echo "Test did not create any transaction file."
   fi
-  echo ""
- fi
  return $NO_ERROR
 }
 
