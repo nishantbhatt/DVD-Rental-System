@@ -1,1 +1,1 @@
-Throw an error when more than 3 copies of the same title are rented.
+Purpose: Test that no more than 3 copies of same tile are rented by standard user.

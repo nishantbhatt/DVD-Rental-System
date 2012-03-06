@@ -1,1 +1,1 @@
-Test that atmost 3 copies can be returned in one transaction.
+Purpose: Test that at most 3 copies can be returned in one transaction.

@@ -1,1 +1,1 @@
-Test that if DVD name does not exists then the add‐transaction is not accepted.
+Purpose: Test that if DVD name does not exists then the add‐transaction is not accepted.
