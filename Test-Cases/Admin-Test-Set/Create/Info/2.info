@@ -1,1 +1,1 @@
-Purpose: Test that create‐transaction is not accepted during standard session.
+Purpose: Test that create transaction is terminated if same DVD is removed in current session.
