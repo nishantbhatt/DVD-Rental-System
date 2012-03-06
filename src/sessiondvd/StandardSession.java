@@ -136,10 +136,6 @@ class StandardSession implements sSession {
 		/* title does not exist */
 		if (cdvd == null)
 			throw new IllegalArgumentException(SessionErrors.DVD_NOT_FOUND);
-		if (quantity > RENT_COPIES_LIMIT)
-			throw new IllegalArgumentException(
-					SessionErrors.EXCEEDING_DVD_QUANTITY.replaceAll("\\{1\\}",
-							"" + RENT_COPIES_LIMIT));
 		if (cdvd.getCount() + quantity > StandardSession.CREATE_COPIES_LIMIT)
 			throw new IllegalArgumentException(SessionErrors.EXCEEDING_DVD_QUANTITY.replaceAll("\\{1\\}", "" + CREATE_COPIES_LIMIT));
 
