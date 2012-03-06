@@ -1,9 +1,4 @@
-Enter command: 
-Session type (standard or admin): 
-Login accepted.
-Enter command: 
-DVD title: 
-Number of copies: 
-Error: Illegal access to privileged command.
-Enter command: 
-Session closed.
+Enter command: Session type (standard or admin): Login accepted.
+Enter command: DVD title: Number of copies: Created successfully.
+Enter command: DVD title: Removed successfully.
+Enter command: Session closed.

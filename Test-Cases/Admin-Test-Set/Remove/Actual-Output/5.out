@@ -1,3 +1,4 @@
-Enter command: DVD title: Number of copies: Error: No session is running.
-Enter command: Error: Invalid command.
-Enter command: 
+Enter command: Session type (standard or admin): Login accepted.
+Enter command: DVD title: Removed successfully.
+Enter command: DVD title: Error: No further transactions are allowed on this DVD title.
+Enter command: Session closed.

@@ -1,4 +1,11 @@
 Enter command: Session type (standard or admin): Login accepted.
-Enter command: DVD title: Number of copies: Error: DVD title is not for buying.
+Enter command: DVD title: Removed successfully.
+Enter command: DVD title: Number of copies: Error: No further transactions are allowed on this DVD title.
+Enter command: DVD title: Number of copies: Error: No further transactions are allowed on this DVD title.
+Enter command: DVD title: Number of copies: Error: No further transactions are allowed on this DVD title.
+Enter command: DVD title: Number of copies: Single DVD Price: 361.58
+Total Price: 723.16
+User Confirmation (yes/no): Error: Invalid Input: Sale Confirmation
+Enter command: Error: Invalid command.
 Enter command: Error: Invalid command.
 Enter command: Session closed.
