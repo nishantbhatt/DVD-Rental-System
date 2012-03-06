@@ -1,1 +1,1 @@
-Purpose: Test that transaction is not allowed in standard mode.
+Purpose: Test that DVD status cannot be changed to sell if current status is already sell.

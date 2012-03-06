@@ -1,6 +1,8 @@
 login
-standard
+admin
 create
 dvd1
 60
+remove
+dvd1
 logout
