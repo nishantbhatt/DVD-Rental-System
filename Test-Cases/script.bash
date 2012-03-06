@@ -9,11 +9,17 @@
 # Notes:
 # 1) To invoke this shell script and redirect standard output and
 #    standard error to a file (such as result.txt) do the
-#    following (the -b flag is test both Admin and Standard test)
+#    following
 #
-#    bash script.bash -b  2>&1  | tee result.out
+#    bash script.bash  2>&1  | tee result.out
+#
 # 2) To check the tests that failed, search for "*** ERROR" keyword
 #    in the output file.
+#    or
+#    Use -e flag to print only those tests that failed:
+#    
+#    bash script.bash -e
+#
 # 3) Every test has a code associated with it, for example
 #    
 #    S-RETURN-04
@@ -21,12 +27,19 @@
 #    This uniquely identifies a test. This means that test checks the
 #    RETURN functionality in Standard session and a number 04 represents
 #    a test number.
-# 4) To perform test on certain functionalities, you can set argument
+#
+# 4) To check if a test identified by A-SELL-2 failed, you can use grep
+#    in list of failed tests, for example:
+#    
+#    bash script.bash -ae | grep "A-SELL-2"
+#
+# 5) To perform test on certain functionalities, you can set argument
 #    -f as regex matching that test. For example, you test RETURN, BUY and
 #    LOGIN during ADMIN session, use following script:
 #
 #    bash script.bash -a -f "(return|buy|login)"
-# 5) To output only failed test you can set -e flag.
+#
+# 6) To output only failed test you can set -e flag.
 #
 ###############################################################################
 
