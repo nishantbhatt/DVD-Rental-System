@@ -1,1 +1,1 @@
-Purpose: Test that RENT transaction gracefully handles bad user inputs.
+Purpose: Test that RETURN transaction gracefully handles all bad user inputs.
