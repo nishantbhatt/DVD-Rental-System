@@ -1,13 +1,4 @@
-Enter command: 
-Session type (standard or admin): 
-Login accepted.
-Enter command:
-DVD title: 
-Number of copies: 
-Created successfully.
-Enter command: 
-DVD title: 
-Number of copies: 
-Error: DVD title does not exist in inventory.
-Enter command: 
-Session closed.
+Enter command: Session type (standard or admin): Login accepted.
+Enter command: DVD title: Number of copies: Created successfully.
+Enter command: DVD title: Number of copies: Error: Newly created DVDs are not avaialble for rental.
+Enter command: Session closed.

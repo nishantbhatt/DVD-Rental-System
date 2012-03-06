@@ -1,10 +1,4 @@
-Enter command: 
-Login accepted.
-Enter command: 
-DVD title: 
-Removed successfully.
-Enter command: 
-DVD title:
-Error: DVD title does not exists in inventory.
-Enter command: 
-Session closed.
+Enter command: Session type (standard or admin): Login accepted.
+Enter command: DVD title: Removed successfully.
+Enter command: DVD title: Error: No further transactions are allowed on this DVD title.
+Enter command: Session closed.

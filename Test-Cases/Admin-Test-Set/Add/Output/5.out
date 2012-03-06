@@ -1,12 +1,4 @@
-Enter command: 
-Session type (standard or admin): 
-Login accepted.
-DVD title: 
-Number of copies: 
-Added successfully.
-Enter command: 
-DVD title: 
-Number of copies: 
-Error: Not enough copies in inventory.
-Enter command: 
-Session closed.
+Enter command: Session type (standard or admin): Login accepted.
+Enter command: DVD title: Number of copies: Added successfully.
+Enter command: DVD title: Number of copies: Error: Added copies of DVDs are not available for rental.
+Enter command: Session closed.
