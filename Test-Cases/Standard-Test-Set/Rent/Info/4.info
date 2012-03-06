@@ -1,1 +1,1 @@
-Purpose: Test that rent‐transaction is working properly for privileged session.
+Purpose: Test that RENT transaction is aborted if DVD title does not exist in database.

@@ -1,1 +1,1 @@
-Purpose: Test that buy transaction is working for privilege mode.
+Purpose: Test that BUY transaction gracefully handles bad input.
