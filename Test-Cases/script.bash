@@ -121,14 +121,14 @@ Test()
   echo "*** SUCCESS. No error(s) were found in execution of the test ($3)."
   echo ""
   echo "Input: "
-  echo `cat ./$1/Input/$2.in`
+  echo "`cat ./$1/Input/$2.in`"
   echo ""
   echo "Output: "
-  echo `cat ./$1/Actual-Output/$2.out`
+  echo "`cat ./$1/Actual-Output/$2.out`"
   echo ""
   echo "Transaction File: "
   if [ -e ./$1/Output-TF/$2.tf ]; then
-   echo `cat ./$1/Actual-Output/$2.tf`
+   echo "`cat ./$1/Actual-Output/$2.tf`"
   else
    echo "Test did not create any transaction file."
   fi
