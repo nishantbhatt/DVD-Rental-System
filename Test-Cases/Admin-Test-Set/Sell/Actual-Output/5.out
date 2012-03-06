@@ -1,1 +1,5 @@
 Enter command: DVD title: DVD Sale Price: Error: No session is running.
+Enter command: Exception in thread "main" java.util.NoSuchElementException
+	at java.util.Scanner.throwFor(Scanner.java:855)
+	at java.util.Scanner.next(Scanner.java:1364)
+	at cuidvd.DVDRentalSystem.main(DVDRentalSystem.java:59)
