@@ -93,4 +93,9 @@ class SessionErrors {
 	 * currently added DVD that is not for renting.
 	 */
 	public static String ADDED_DVD_NOT_FOR_RENTAL = "Added copies of DVDs are not available for rental.";
+	/**
+	 * Static variable that is used to displays error when user attempts to rent
+	 * currently added DVD that is not for renting.
+	 */
+	public static String DVD_ALREADY_ON_SALE = "DVD is already on sale.";
 }

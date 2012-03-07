@@ -146,8 +146,10 @@ class AdminSession extends StandardSession implements pSession {
 			throw new IllegalArgumentException(
 					SessionErrors.EXCEEDING_DVD_PRICE.replaceAll("\\{1\\}", ""
 							+ DVD_PRICE_LIMIT));
-
+		
 		CurrentDVD dvdInfo = dvd_collection.get(title);
+		if(dvdInfo.getStatus() == DVDStatus.SALE)
+			throw new IllegalArgumentException(SessionErrors.)
 		dvdInfo.setPrice(price);
 		dvdInfo.setStatus(DVDStatus.SALE);
 
