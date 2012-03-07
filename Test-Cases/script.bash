@@ -96,7 +96,6 @@ Test()
  echo "`cat ./$1/Info/$2.info` [$3]"
  echo ""
  #------------------------------------------------------------------------------
-
  #-------------------------------------------------------------------------------
  echo "Running java command..."
  echo "java -jar ../dvdrental.jar ../dvds.txt ./$1/Actual-Output/$2.tf"
@@ -105,6 +104,7 @@ Test()
  #-------------------------------------------------------------------------------
 
  NO_ERROR=0
+# Find the difference between actual and expected output files. If they are not matching an error is printed.
  #-------------------------------------------------------------------------------
  echo "Checking results..."
  result_output=$((diff ./$1/Actual-Output/$2.out ./$1/Output/$2.out) 2>&1)
@@ -116,7 +116,7 @@ Test()
   echo ""
  fi
 #---------------------------------------------------------------------------------
-
+# Find the difference between actual and expected transaction files. If they are not matching an error is printed.
 #---------------------------------------------------------------------------------
  if [ -e ./$1/Output-TF/$2.tf ]; then
   result_transc=$((diff ./$1/Actual-Output/$2.tf ./$1/Output-TF/$2.tf) 2>&1)
@@ -129,7 +129,7 @@ Test()
   fi
  fi
  #-------------------------------------------------------------------------------
- 
+ # Displays all the successful test cases.
  if [ "$NO_ERROR" -eq 0 ]; then
   echo "*** SUCCESS. No error(s) were found in execution of the test [$3]."
   echo ""
@@ -155,6 +155,7 @@ Test()
  return $NO_ERROR
 }
 
+# Iterates through all the test cases within a folder that has been specified as an argument.
 run_test() {
  cd $1
  for d in *; do
@@ -201,13 +202,20 @@ SILENT="no"	                        # User wants prompts
 # ----------------------------------
 # Handle keyword parameters (flags).
 # ----------------------------------
+# admin mode only flag
 AFLAG="no"
+# standard mode only flag
 SFLAG="no"
+# regex to filter out the functionality
 REGEX=".*"
+# error flag
 ERROR="no"
-FAILED_TESTS=0
-TOTAL_TESTS=0
 
+# total number of test cases failed
+FAILED_TESTS=0
+# total number of test cases tested with the script
+TOTAL_TESTS=0
+# Pasrisng all the command line arguments and setting the flags.
 while getopts ehasf: opt
  do
   case $opt in
@@ -229,26 +237,30 @@ dateTest=`date`
 echo "Begin testing at: $dateTest"
 echo "************************************************************"
 
+# if both -a and -s flags are false then set both of them to true
 if [ "$AFLAG" != "yes" -a "$SFLAG" != "yes" ]; then
  AFLAG="yes"
  SFLAG="yes"
 fi
 
+# regex matching must be non case sensitive
 shopt -s nocasematch;
 
+# if -a flag is true then run tests for Admin-Test-Set
 if [ "$AFLAG" == "yes" ]; then
  run_test "Admin-Test-Set"
  cd ..
 fi
 
+# if -s is true then run tests for Standard-Test-Set
 if [ "$SFLAG" = "yes" ]; then
  run_test "Standard-Test-Set"
  cd ..
 fi
 
+# print all the results
 echo "************************************************************"
 echo "Total tests:  $TOTAL_TESTS"
 echo "Failed tests: $FAILED_TESTS"
 dateTest=`date`
 echo "End testing at: $dateTest"
-
