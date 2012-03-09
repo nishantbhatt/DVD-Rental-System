@@ -237,6 +237,7 @@ class StandardSession implements sSession {
 				transac_writer.writeObject(transac_iterator.next());
 		} catch (Exception ex) {
 			transac_file.delete();
+			throw new IOException(ex.getMessage());
 		} finally {
 			transac_writer.close();
 		}
