@@ -43,6 +43,42 @@ public class DVDTransaction {
 		this.status = status;
 		this.price = price;
 	}
+	
+	public DVDTransaction(int trans_id, String dvd_title,
+			int quantity, DVDStatus status, double price) {
+		switch(trans_id) {
+		case 1:
+			this.trans_id = TransactionID.RENT;
+			break;
+		case 2:
+			this.trans_id = TransactionID.RETURN;
+			break;
+		case 3:
+			this.trans_id = TransactionID.CREATE;
+			break;
+		case 4:
+			this.trans_id = TransactionID.ADD;
+			break;
+		case 5:
+			this.trans_id = TransactionID.REMOVE;
+			break;
+		case 6:
+			this.trans_id = TransactionID.BUY;
+			break;
+		case 7:
+			this.trans_id = TransactionID.SELL;
+			break;
+		case 0:
+			this.trans_id = TransactionID.LOGOUT;
+			break;
+		default:
+			throw new IllegalArgumentException("Invalid Transaction ID.");
+		}
+		this.dvd_title = dvd_title;
+		this.quantity = quantity;
+		this.status = status;
+		this.price = price;
+	}
 
 	/**
 	 * Returns the Transaction ID.
