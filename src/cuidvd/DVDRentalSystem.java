@@ -3,7 +3,8 @@ package cuidvd;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.zip.DataFormatException;
-import sessiondvd.*;
+
+import session.frontend.*;
 import utilsdvd.GlobalFiles;
 
 /**
