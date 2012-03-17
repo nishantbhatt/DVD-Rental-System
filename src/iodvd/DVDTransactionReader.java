@@ -3,7 +3,6 @@ package iodvd;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashSet;
 import java.util.zip.DataFormatException;
 
 public class DVDTransactionReader extends BufferedReader implements
