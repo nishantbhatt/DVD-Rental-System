@@ -3,13 +3,16 @@ package iodvd;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashSet;
 import java.util.zip.DataFormatException;
 
 public class MasterDVDReader extends BufferedReader implements
 		iFileReader<MasterDVD> {
 
+	HashSet<String> dvds;
 	public MasterDVDReader(Reader arg0) {
 		super(arg0);
+		dvds = new HashSet<String>();
 	}
 
 	@Override
@@ -31,11 +34,16 @@ public class MasterDVDReader extends BufferedReader implements
 		String tot_quantity = _next.substring(11, 15);
 		String status = _next.substring(16, 17);
 		String price = _next.substring(18, 24);
-		String title = _next.substring(25, 50);
-
+		String title = _next.substring(25, 50).trim();
+		
+		if(dvds.contains(title))
+			throw new IOException("DVD title \"" + title + "\" has duplicated values.");
+		dvds.add(title);
+		
 		double _price = 0;
 		int _rem_quantity, _tot_quantity, _dvd_id;
 		DVDStatus _status;
+		
 		/* Try and parse all the above extracted information */
 		try {
 			_dvd_id = Integer.parseInt(dvd_id);
@@ -55,7 +63,7 @@ public class MasterDVDReader extends BufferedReader implements
 		}
 
 		/* return a new DVD */
-		return new MasterDVD(_dvd_id, _rem_quantity, _tot_quantity, _status, _price, title.trim());
+		return new MasterDVD(_dvd_id, _rem_quantity, _tot_quantity, _status, _price, title);
 	}
 
 }
