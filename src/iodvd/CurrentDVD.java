@@ -1,5 +1,7 @@
 package iodvd;
 
+import java.text.DecimalFormat;
+
 /**
  * Class stores information related to DVD in Current DVD File.
  * 
@@ -109,5 +111,13 @@ public class CurrentDVD {
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	public String toString() {
+		/* writes the Current DVD information as per the requirement document */
+		DecimalFormat money_format = new DecimalFormat("000.00");
+		String _return = String.format("%-25s %04d %1s %1s", title, count,
+				status.SYMBOL(), money_format.format(price));
+		return _return;
 	}
 }

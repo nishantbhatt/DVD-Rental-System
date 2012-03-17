@@ -1,9 +1,13 @@
 package iodvd;
 
+import java.text.DecimalFormat;
+
 /**
- * Class stores the information related to transactions made in DVD Rental System.
+ * Class stores the information related to transactions made in DVD Rental
+ * System.
+ * 
  * @author 100413064
- *
+ * 
  */
 public class DVDTransaction {
 	/**
@@ -26,14 +30,20 @@ public class DVDTransaction {
 	 * Price of DVD involved within transaction.
 	 */
 	double price;
-	
+
 	/**
 	 * Public constructor for the class.
-	 * @param trans_id Transaction Code.
-	 * @param dvd_title Title of the DVD.
-	 * @param quantity Number of copies of the DVD.
-	 * @param status Status of the DVD.
-	 * @param price Price of the DVD.
+	 * 
+	 * @param trans_id
+	 *            Transaction Code.
+	 * @param dvd_title
+	 *            Title of the DVD.
+	 * @param quantity
+	 *            Number of copies of the DVD.
+	 * @param status
+	 *            Status of the DVD.
+	 * @param price
+	 *            Price of the DVD.
 	 */
 	public DVDTransaction(TransactionID trans_id, String dvd_title,
 			int quantity, DVDStatus status, double price) {
@@ -43,10 +53,10 @@ public class DVDTransaction {
 		this.status = status;
 		this.price = price;
 	}
-	
-	public DVDTransaction(int trans_id, String dvd_title,
-			int quantity, DVDStatus status, double price) {
-		switch(trans_id) {
+
+	public DVDTransaction(int trans_id, String dvd_title, int quantity,
+			DVDStatus status, double price) {
+		switch (trans_id) {
 		case 1:
 			this.trans_id = TransactionID.RENT;
 			break;
@@ -82,6 +92,7 @@ public class DVDTransaction {
 
 	/**
 	 * Returns the Transaction ID.
+	 * 
 	 * @return Transaction ID
 	 */
 	public TransactionID getTrans_id() {
@@ -90,6 +101,7 @@ public class DVDTransaction {
 
 	/**
 	 * Returns the title of the DVD involved in transaction.
+	 * 
 	 * @return Title of the DVD.
 	 */
 	public String getDvd_title() {
@@ -98,6 +110,7 @@ public class DVDTransaction {
 
 	/**
 	 * Returns the number of the DVD's copies involved in transaction.
+	 * 
 	 * @return Number of copies of the DVD.
 	 */
 	public int getQuantity() {
@@ -106,6 +119,7 @@ public class DVDTransaction {
 
 	/**
 	 * returns the status of the DVD involved in transaction.
+	 * 
 	 * @return Status of the DVD.
 	 */
 	public DVDStatus getStatus() {
@@ -114,9 +128,23 @@ public class DVDTransaction {
 
 	/**
 	 * Returns the price of DVD involved in the transaction.
+	 * 
 	 * @return Price of the DVD.
 	 */
 	public double getPrice() {
 		return price;
+	}
+
+	@Override
+	public String toString() {
+		/*
+		 * Writes the transaction information as per format mentioned in
+		 * requirement document
+		 */
+		DecimalFormat money_format = new DecimalFormat("000.00");
+		String _return = String.format("%02d %-25s %03d %1s %s", trans_id.ID(),
+				dvd_title, quantity, status.SYMBOL(),
+				money_format.format(price));
+		return _return;
 	}
 }
