@@ -66,31 +66,21 @@ public class BackEndEngine implements iBackEnd {
 				if (transac.getTrans_id() == TransactionID.CREATE) {
 
 					if (mdvd != null)
-						throw new ConstraintFailedException(
-								"Cannot create a DVD title \""
-										+ transac.getDvd_title()
-										+ "\". It is already in the Old Master DVD file.",
-								transac);
+						throw new ConstraintFailedException("Cannot create a DVD title \"" + transac.getDvd_title() + "\". " +
+								"It is already in the Old Master DVD file.", transac);
 
 					int id = 0;
 					if (!removeMasterDVDs.isEmpty())
 						id = removeMasterDVDs.poll();
 					/* add master DVD */
-					masterList
-							.put(transac.getDvd_title(),
-									new MasterDVD(id, transac.getQuantity(),
-											transac.getQuantity(), transac
-													.getStatus(), transac
-													.getPrice(), transac
-													.getDvd_title()));
+					masterList.put(transac.getDvd_title(), new MasterDVD(id, transac.getQuantity(), transac.getQuantity(), 
+							transac.getStatus(), transac.getPrice(), transac.getDvd_title()));
 				} else {
 
 					/* check if DVD title exist in old master DVD file */
 					if (mdvd == null)
-						throw new FatalBackEndException("Title \""
-								+ transac.getDvd_title()
-								+ "\" does not exist in Old Master DVD file.",
-								FileType.OldMasterDVD);
+						throw new FatalBackEndException("Title \"" + transac.getDvd_title() + 
+								"\" does not exist in Old Master DVD file.", FileType.OldMasterDVD);
 
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
