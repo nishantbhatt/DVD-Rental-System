@@ -1,4 +1,6 @@
 package iodvd;
+import iodvd.exception.DVDCountFormatException;
+import iodvd.exception.DVDPriceFormatException;
 
 import java.text.DecimalFormat;
 
@@ -62,8 +64,11 @@ public class CurrentDVD {
 	 * 
 	 * @param price
 	 *            Price of DVD to be set.
+	 * @throws DVDPriceFormatException 
 	 */
-	public void setPrice(double price) {
+	public void setPrice(double price) throws DVDPriceFormatException {
+		if(price < 0)
+			throw new DVDPriceFormatException("DVD price must be between 0 - 999");
 		this.price = price;
 	}
 
@@ -72,8 +77,11 @@ public class CurrentDVD {
 	 * 
 	 * @param count
 	 *            Number of copies of DVD to be set.
+	 * @throws DVDCountFormatException 
 	 */
-	public void setCount(int count) {
+	public void setCount(int count) throws DVDCountFormatException {
+		if(count < 0)
+			throw new DVDCountFormatException("DVD count must be a positive number");
 		this.count = count;
 	}
 

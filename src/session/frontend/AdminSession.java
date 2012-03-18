@@ -1,6 +1,9 @@
 package session.frontend;
 
 import iodvd.*;
+import iodvd.exception.DVDCountFormatException;
+import iodvd.exception.DVDPriceFormatException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,7 +116,12 @@ class AdminSession extends StandardSession implements pSession {
 							"\\{1\\}", "" + CREATE_COPIES_LIMIT));
 
 		/* increase the count */
-		cdvd.setCount(cdvd.getCount() + quantity);
+		try {
+			cdvd.setCount(cdvd.getCount() + quantity);
+		} catch (DVDCountFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/*
 		 * Make sure to carefully update added_dvds if "add" command is called
 		 * for same DVD title multiple times during same session
@@ -150,7 +158,12 @@ class AdminSession extends StandardSession implements pSession {
 		CurrentDVD dvdInfo = dvd_collection.get(title);
 		if(dvdInfo.getStatus() == DVDStatus.SALE)
 			throw new IllegalArgumentException(SessionErrors.DVD_ALREADY_ON_SALE);
-		dvdInfo.setPrice(price);
+		try {
+			dvdInfo.setPrice(price);
+		} catch (DVDPriceFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dvdInfo.setStatus(DVDStatus.SALE);
 
 		if (created_dvds.contains(title))

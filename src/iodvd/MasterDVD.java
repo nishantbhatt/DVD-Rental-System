@@ -1,5 +1,7 @@
 package iodvd;
 
+import iodvd.exception.DVDCountFormatException;
+
 import java.text.DecimalFormat;
 
 public class MasterDVD extends CurrentDVD {
@@ -18,7 +20,9 @@ public class MasterDVD extends CurrentDVD {
 		return super.getCount();
 	}
 
-	public void setRemaining_quantity(int remaining_quantity) {
+	public void setRemaining_quantity(int remaining_quantity) throws DVDCountFormatException {
+		if(remaining_quantity < 0)
+			throw new DVDCountFormatException("Remaning DVD quantity cannot be negative");
 		super.setCount(remaining_quantity);
 	}
 

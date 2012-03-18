@@ -13,6 +13,7 @@ import java.util.zip.DataFormatException;
 
 import utilsdvd.GlobalFiles;
 import iodvd.*;
+import iodvd.exception.DVDCountFormatException;
 
 /**
  * This class contains all functionality that is command between ADMIN and
@@ -116,7 +117,12 @@ class StandardSession implements sSession {
 			throw new IllegalArgumentException(SessionErrors.NOT_ENOUGH_DVDS);
 
 		/* Subtract rented quantity from total */
-		cdvd.setCount(cdvd.getCount() - quantity);
+		try {
+			cdvd.setCount(cdvd.getCount() - quantity);
+		} catch (DVDCountFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		/* add to transaction history */
 		transactions.add(new DVDTransaction(TransactionID.RENT, title,
@@ -149,7 +155,12 @@ class StandardSession implements sSession {
 							"" + CREATE_COPIES_LIMIT));
 
 		/* add rented quantity to total */
-		cdvd.setCount(cdvd.getCount() + quantity);
+		try {
+			cdvd.setCount(cdvd.getCount() + quantity);
+		} catch (DVDCountFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		/* add to transaction history */
 		transactions.add(new DVDTransaction(TransactionID.RETURN, title,
@@ -205,7 +216,12 @@ class StandardSession implements sSession {
 			throw new IllegalArgumentException(SessionErrors.NOT_ENOUGH_DVDS);
 
 		/* subtract brought copies from total */
-		cdvd.setCount(cdvd.getCount() - quantity);
+		try {
+			cdvd.setCount(cdvd.getCount() - quantity);
+		} catch (DVDCountFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		/* add to transaction history */
 		transactions.add(new DVDTransaction(TransactionID.BUY, title, quantity,
