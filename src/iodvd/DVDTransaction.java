@@ -14,22 +14,8 @@ public class DVDTransaction {
 	 * Identifies the particular transaction.
 	 */
 	TransactionID trans_id;
-	/**
-	 * Identifies the DVD title involved in transaction.
-	 */
-	String dvd_title;
-	/**
-	 * Number of copies involved within transaction.
-	 */
-	int quantity;
-	/**
-	 * Status of DVD involved in the transaction.
-	 */
-	DVDStatus status;
-	/**
-	 * Price of DVD involved within transaction.
-	 */
-	double price;
+	
+	CurrentDVD cdvd = null;
 
 	/**
 	 * Public constructor for the class.
@@ -48,10 +34,7 @@ public class DVDTransaction {
 	public DVDTransaction(TransactionID trans_id, String dvd_title,
 			int quantity, DVDStatus status, double price) {
 		this.trans_id = trans_id;
-		this.dvd_title = dvd_title;
-		this.quantity = quantity;
-		this.status = status;
-		this.price = price;
+		cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 	}
 
 	public DVDTransaction(int trans_id, String dvd_title, int quantity,
@@ -84,10 +67,7 @@ public class DVDTransaction {
 		default:
 			throw new IllegalArgumentException("Invalid Transaction ID.");
 		}
-		this.dvd_title = dvd_title;
-		this.quantity = quantity;
-		this.status = status;
-		this.price = price;
+		cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 	}
 
 	/**
@@ -105,7 +85,7 @@ public class DVDTransaction {
 	 * @return Title of the DVD.
 	 */
 	public String getDvd_title() {
-		return dvd_title;
+		return cdvd.getTitle();
 	}
 
 	/**
@@ -114,7 +94,7 @@ public class DVDTransaction {
 	 * @return Number of copies of the DVD.
 	 */
 	public int getQuantity() {
-		return quantity;
+		return cdvd.getCount();
 	}
 
 	/**
@@ -123,7 +103,7 @@ public class DVDTransaction {
 	 * @return Status of the DVD.
 	 */
 	public DVDStatus getStatus() {
-		return status;
+		return cdvd.getStatus();
 	}
 
 	/**
@@ -132,7 +112,11 @@ public class DVDTransaction {
 	 * @return Price of the DVD.
 	 */
 	public double getPrice() {
-		return price;
+		return cdvd.getPrice();
+	}
+	
+	public CurrentDVD getDVDInfo() {
+		return cdvd;
 	}
 
 	@Override
@@ -143,8 +127,8 @@ public class DVDTransaction {
 		 */
 		DecimalFormat money_format = new DecimalFormat("000.00");
 		String _return = String.format("%02d %-25s %03d %1s %s", trans_id.ID(),
-				dvd_title, quantity, status.SYMBOL(),
-				money_format.format(price));
+				getDvd_title(), getQuantity(), getStatus().SYMBOL(),
+				money_format.format(getPrice()));
 		return _return;
 	}
 }
