@@ -14,16 +14,31 @@ import java.util.zip.DataFormatException;
 import iodvd.*;
 import iodvd.exception.DVDFormatException;
 import iodvd.exception.TransactionFormatException;
-
+/**
+ * This class 
+ * @author nishantbhatt
+ *
+ */
 public class BackEndEngine implements iBackEnd {
 
+	/**
+	 * Hashmap structure that stores Master DVD data.
+	 */
 	HashMap<String, MasterDVD> masterList = new HashMap<String, MasterDVD>();
-
+	
+	/**
+	 * 
+	 * @param transac_files Transaction files that holds all backend transactions.
+	 * @param merged_transac_file Transaction files after they have been merged.
+	 * @throws FatalBackEndException Exceptions that occur during backend transactions.
+	 */
 	public static void merge(String[] transac_files, String merged_transac_file)
 			throws FatalBackEndException {
 		// TODO Auto-generated method stub
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public void process(String transacFile, String masterDVDFile)
 			throws FatalBackEndException, ConstraintFailedException {
@@ -126,7 +141,9 @@ public class BackEndEngine implements iBackEnd {
 			throw new IllegalArgumentException(impex.getMessage());
 		}
 	}
-
+	/**
+	 * 
+	 */
 	@Override
 	public void write(String currentDVDFile, String masterDVDFile)
 			throws FatalBackEndException {
