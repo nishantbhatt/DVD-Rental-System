@@ -2,7 +2,7 @@ package session.backend;
 
 import iodvd.DVDTransaction;
 /**
- * 
+ * This class holds information about the constrain exceptions that occurs during that backend session.   
  * @author nishantbhatt
  *
  */
@@ -19,9 +19,7 @@ public class ConstraintFailedException extends IllegalAccessException {
 	public DVDTransaction getTransaction() {
 		return transaction;
 	}
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 

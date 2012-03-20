@@ -15,7 +15,7 @@ import iodvd.*;
 import iodvd.exception.DVDFormatException;
 import iodvd.exception.TransactionFormatException;
 /**
- * This class 
+ * This class is the heart of back-end session that processes all the back end transactions.
  * @author nishantbhatt
  *
  */
@@ -65,9 +65,7 @@ public class BackEndEngine implements iBackEnd {
 			}
 		}
 	}
-	/**
-	 * 
-	 */
+
 	@Override
 	public void process(String transacFile, String masterDVDFile)
 			throws FatalBackEndException, ConstraintFailedException {
@@ -179,9 +177,7 @@ public class BackEndEngine implements iBackEnd {
 			throw new IllegalArgumentException(impex.getMessage());
 		}
 	}
-	/**
-	 * 
-	 */
+
 	@Override
 	public void write(String currentDVDFile, String masterDVDFile)
 			throws FatalBackEndException {
