@@ -1,9 +1,10 @@
 package iodvd;
 
+import iodvd.exception.TransactionFormatException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.zip.DataFormatException;
 
 public class DVDTransactionReader extends BufferedReader implements
 		iFileReader<DVDTransaction> {
@@ -13,14 +14,14 @@ public class DVDTransactionReader extends BufferedReader implements
 	}
 
 	@Override
-	public DVDTransaction readNext() throws IOException, DataFormatException {
+	public DVDTransaction readNext() throws IOException, TransactionFormatException {
 		String _next;
 		if ((_next = super.readLine()) == null)
 			return null;
 
 		/* Check if every line is exactly 39 characters long */
 		if (_next.length() != 41)
-			throw new DataFormatException(
+			throw new TransactionFormatException(
 					"Wrong format of DVD Transaction File.");
 
 		/*
@@ -51,7 +52,7 @@ public class DVDTransactionReader extends BufferedReader implements
 
 			_price = Double.parseDouble(price);
 		} catch (Exception ex) {
-			throw new DataFormatException(
+			throw new TransactionFormatException(
 					"Wrong format of DVD Transaction File.");
 		}
 
