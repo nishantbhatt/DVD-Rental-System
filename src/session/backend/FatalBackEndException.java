@@ -12,7 +12,7 @@ public class FatalBackEndException extends IOException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public FatalBackEndException(String message, FileType fileType) {
+	public FatalBackEndException(String message, FileType fileType, String filename) {
 		super(message);
 		this.fileType = fileType;
 	}
