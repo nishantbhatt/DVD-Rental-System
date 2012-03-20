@@ -1,10 +1,11 @@
 package iodvd;
 
+import iodvd.exception.DVDFormatException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashSet;
-import java.util.zip.DataFormatException;
 
 public class MasterDVDReader extends BufferedReader implements
 		iFileReader<MasterDVD> {
@@ -16,14 +17,14 @@ public class MasterDVDReader extends BufferedReader implements
 	}
 
 	@Override
-	public MasterDVD readNext() throws IOException, DataFormatException {
+	public MasterDVD readNext() throws IOException, DVDFormatException {
 		String _next;
 		if ((_next = super.readLine()) == null)
 			return null;
 
 		/* Check if every line is exactly 39 characters long */
 		if (_next.length() != 50)
-			throw new DataFormatException("Wrong format of Master DVD File.");
+			throw new DVDFormatException("Wrong format of Master DVD File.");
 
 		/*
 		 * Extract information as per the format specified in requirement
@@ -59,7 +60,7 @@ public class MasterDVDReader extends BufferedReader implements
 
 			_price = Double.parseDouble(price);
 		} catch (Exception ex) {
-			throw new DataFormatException("Wrong format of Master DVD File.");
+			throw new DVDFormatException("Wrong format of Master DVD File.");
 		}
 
 		/* return a new DVD */
