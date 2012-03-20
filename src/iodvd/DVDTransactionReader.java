@@ -14,7 +14,8 @@ public class DVDTransactionReader extends BufferedReader implements
 	}
 
 	@Override
-	public DVDTransaction readNext() throws IOException, TransactionFormatException {
+	public DVDTransaction readNext() throws IOException,
+			TransactionFormatException {
 		String _next;
 		if ((_next = super.readLine()) == null)
 			return null;
