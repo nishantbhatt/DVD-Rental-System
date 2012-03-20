@@ -1,6 +1,7 @@
 package iodvd;
 
 import iodvd.exception.DVDFormatException;
+import iodvd.exception.TransactionFormatException;
 
 import java.text.DecimalFormat;
 
@@ -32,19 +33,20 @@ public class DVDTransaction {
 	 *            Status of the DVD.
 	 * @param price
 	 *            Price of the DVD.
+	 * @throws TransactionFormatException 
 	 */
 	public DVDTransaction(TransactionID trans_id, String dvd_title,
-			int quantity, DVDStatus status, double price) {
+			int quantity, DVDStatus status, double price) throws TransactionFormatException {
 		this.trans_id = trans_id;
 		try {
 			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 		} catch (DVDFormatException e) {
-			throw new IllegalArgumentException(e.getMessage());
+			throw new TransactionFormatException(e.getMessage());
 		}
 	}
 
 	public DVDTransaction(int trans_id, String dvd_title, int quantity,
-			DVDStatus status, double price) {
+			DVDStatus status, double price) throws TransactionFormatException {
 		switch (trans_id) {
 		case 1:
 			this.trans_id = TransactionID.RENT;
@@ -76,7 +78,7 @@ public class DVDTransaction {
 		try {
 			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 		} catch (DVDFormatException e) {
-			throw new IllegalArgumentException(e.getMessage());
+			throw new TransactionFormatException(e.getMessage());
 		}
 	}
 
