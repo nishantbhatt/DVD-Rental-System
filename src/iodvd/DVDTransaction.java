@@ -1,5 +1,7 @@
 package iodvd;
 
+import iodvd.exception.DVDFormatException;
+
 import java.text.DecimalFormat;
 
 /**
@@ -34,7 +36,11 @@ public class DVDTransaction {
 	public DVDTransaction(TransactionID trans_id, String dvd_title,
 			int quantity, DVDStatus status, double price) {
 		this.trans_id = trans_id;
-		cdvd = new CurrentDVD(dvd_title, price, quantity, status);
+		try {
+			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
+		} catch (DVDFormatException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
 	}
 
 	public DVDTransaction(int trans_id, String dvd_title, int quantity,
@@ -67,7 +73,11 @@ public class DVDTransaction {
 		default:
 			throw new IllegalArgumentException("Invalid Transaction ID.");
 		}
-		cdvd = new CurrentDVD(dvd_title, price, quantity, status);
+		try {
+			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
+		} catch (DVDFormatException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
 	}
 
 	/**
