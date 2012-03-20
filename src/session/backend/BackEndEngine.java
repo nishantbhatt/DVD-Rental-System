@@ -27,13 +27,13 @@ public class BackEndEngine implements iBackEnd {
 			fwrt = new FileWriter(merged_transac_file);
 		} catch (IOException e) {
 			throw new FatalBackEndException(e.getMessage(),
-					FileType.MergedTransactionFile);
+					FileType.MergedTransactionFile, merged_transac_file);
 		}
 		for (int i = 0; i < transac_files.length; i++) {
 			try {
 				tfr = new DVDTransactionReader(new FileReader(transac_files[i]));
 			} catch (FileNotFoundException e) {
-				throw new FatalBackEndException(e.getMessage(), FileType.TransactionFile);
+				throw new FatalBackEndException(e.getMessage(), FileType.TransactionFile, transac_files[i]);
 			}
 			DVDTransaction transac;
 			try {
@@ -41,14 +41,14 @@ public class BackEndEngine implements iBackEnd {
 					try {
 						fwrt.write(transac.toString() + "\n");
 					} catch (IOException e) {
-						throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile);
+						throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile, merged_transac_file);
 					}
 				}
 			}
 			catch (IOException ex) {
-				throw new FatalBackEndException(ex.getMessage(), FileType.TransactionFile);
+				throw new FatalBackEndException(ex.getMessage(), FileType.TransactionFile, transac_files[i]);
 			} catch (DataFormatException exx) {
-				throw new FatalBackEndException(exx.getMessage(), FileType.TransactionFile);
+				throw new FatalBackEndException(exx.getMessage(), FileType.TransactionFile, transac_files[i]);
 			}
 		}
 	}
@@ -65,14 +65,14 @@ public class BackEndEngine implements iBackEnd {
 			ofr = new MasterDVDReader(new FileReader(masterDVDFile));
 		} catch (FileNotFoundException ex) {
 			throw new FatalBackEndException("Old Master DVD file not found.",
-					FileType.OldMasterDVD);
+					FileType.OldMasterDVD, masterDVDFile);
 		}
 		try {
 			tfr = new DVDTransactionReader(new FileReader(transacFile));
 		} catch (FileNotFoundException ex) {
 			throw new FatalBackEndException(
 					"Merged Transaction file not found.",
-					FileType.MergedTransactionFile);
+					FileType.MergedTransactionFile, transacFile);
 		}
 
 		/* read and store old master file into hash map */
@@ -84,7 +84,7 @@ public class BackEndEngine implements iBackEnd {
 		} catch (Exception ex) {
 			masterList = null;
 			throw new FatalBackEndException(ex.getMessage(),
-					FileType.OldMasterDVD);
+					FileType.OldMasterDVD, masterDVDFile);
 		}
 
 		DVDTransaction transac = null;
@@ -125,7 +125,7 @@ public class BackEndEngine implements iBackEnd {
 						throw new FatalBackEndException("Title \""
 								+ transac.getDvd_title()
 								+ "\" does not exist in Old Master DVD file.",
-								FileType.OldMasterDVD);
+								FileType.OldMasterDVD, masterDVDFile);
 
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
@@ -154,12 +154,12 @@ public class BackEndEngine implements iBackEnd {
 			}
 		} catch (IOException ex) {
 			throw new FatalBackEndException(ex.getMessage(),
-					FileType.MergedTransactionFile);
+					FileType.MergedTransactionFile, transacFile);
 		} catch (DVDFormatException exdvd) {
 			throw new ConstraintFailedException(exdvd.getMessage(), transac);
 		} catch (TransactionFormatException dex) {
 			throw new FatalBackEndException(dex.getMessage(),
-					FileType.MergedTransactionFile);
+					FileType.MergedTransactionFile, transacFile);
 		} catch (DataFormatException impex) {
 			throw new IllegalArgumentException(impex.getMessage());
 		}
@@ -173,14 +173,14 @@ public class BackEndEngine implements iBackEnd {
 			cdf = new FileWriter(currentDVDFile);
 		} catch (IOException ex) {
 			throw new FatalBackEndException(ex.getMessage(),
-					FileType.CurrentDVD);
+					FileType.CurrentDVD, currentDVDFile);
 		}
 
 		try {
 			mdf = new FileWriter(masterDVDFile);
 		} catch (IOException ex) {
 			throw new FatalBackEndException(ex.getMessage(),
-					FileType.NewMasterDVD);
+					FileType.NewMasterDVD, masterDVDFile);
 		}
 
 		TreeMap<Integer, MasterDVD> sorted_list = new TreeMap<Integer, MasterDVD>();
@@ -196,14 +196,14 @@ public class BackEndEngine implements iBackEnd {
 				mdf.write(mdvd.toString() + "\n");
 			} catch (IOException e1) {
 				throw new FatalBackEndException(e1.getMessage(),
-						FileType.NewMasterDVD);
+						FileType.NewMasterDVD, masterDVDFile);
 			}
 			if (mdvd.getCount() != 0) {
 				try {
 					cdf.write(((CurrentDVD) mdvd).toString() + "\n");
 				} catch (IOException e) {
 					throw new FatalBackEndException(e.getMessage(),
-							FileType.CurrentDVD);
+							FileType.CurrentDVD, currentDVDFile);
 				}
 			}
 		}
