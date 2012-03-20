@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import java.util.zip.DataFormatException;
 
 import iodvd.*;
+import iodvd.exception.DVDFormatException;
 
 public class BackEndEngine implements iBackEnd {
 
@@ -56,9 +57,9 @@ public class BackEndEngine implements iBackEnd {
 					FileType.OldMasterDVD);
 		}
 
+		DVDTransaction transac = null;
 		/* read and process the transaction */
 		try {
-			DVDTransaction transac;
 			Queue<Integer> removeMasterDVDs = new LinkedList<Integer>();
 
 			while ((transac = tfr.readNext()) != null) {
@@ -113,7 +114,11 @@ public class BackEndEngine implements iBackEnd {
 		} catch (IOException ex) {
 			throw new FatalBackEndException(ex.getMessage(),
 					FileType.MergedTransactionFile);
-		} catch (DataFormatException dex) {
+		}
+		catch (DVDFormatException exdvd) {
+			throw new ConstraintFailedException(exdvd.getMessage(), transac);
+		}
+		catch (DataFormatException dex) {
 			throw new FatalBackEndException(dex.getMessage(),
 					FileType.MergedTransactionFile);
 		}
