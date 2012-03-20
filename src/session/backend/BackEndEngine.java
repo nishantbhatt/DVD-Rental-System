@@ -34,7 +34,36 @@ public class BackEndEngine implements iBackEnd {
 	 */
 	public static void merge(String[] transac_files, String merged_transac_file)
 			throws FatalBackEndException {
-		// TODO Auto-generated method stub
+		iFileReader<DVDTransaction> tfr;
+		FileWriter fwrt;
+		try {
+			fwrt = new FileWriter(merged_transac_file);
+		} catch (IOException e) {
+			throw new FatalBackEndException(e.getMessage(),
+					FileType.MergedTransactionFile);
+		}
+		for (int i = 0; i < transac_files.length; i++) {
+			try {
+				tfr = new DVDTransactionReader(new FileReader(transac_files[i]));
+			} catch (FileNotFoundException e) {
+				throw new FatalBackEndException(e.getMessage(), FileType.TransactionFile);
+			}
+			DVDTransaction transac;
+			try {
+				while ((transac = tfr.readNext()) != null) {
+					try {
+						fwrt.write(transac.toString() + "\n");
+					} catch (IOException e) {
+						throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile);
+					}
+				}
+			}
+			catch (IOException ex) {
+				throw new FatalBackEndException(ex.getMessage(), FileType.TransactionFile);
+			} catch (DataFormatException exx) {
+				throw new FatalBackEndException(exx.getMessage(), FileType.TransactionFile);
+			}
+		}
 	}
 	/**
 	 * 
@@ -83,24 +112,35 @@ public class BackEndEngine implements iBackEnd {
 				if (transac.getTrans_id() == TransactionID.CREATE) {
 
 					if (mdvd != null)
-						throw new ConstraintFailedException("Cannot create a DVD title \"" + transac.getDvd_title() + "\". " +
-								"It is already in the Old Master DVD file.", transac);
+						throw new ConstraintFailedException(
+								"Cannot create a DVD title \""
+										+ transac.getDvd_title()
+										+ "\". "
+										+ "It is already in the Old Master DVD file.",
+								transac);
 
 					int id = 0;
 					if (!removeMasterDVDs.isEmpty())
 						id = removeMasterDVDs.poll();
 					else
 						id = masterList.size();
-					
+
 					/* add master DVD */
-					masterList.put(transac.getDvd_title(), new MasterDVD(id, transac.getQuantity(), transac.getQuantity(), 
-							transac.getStatus(), transac.getPrice(), transac.getDvd_title()));
+					masterList
+							.put(transac.getDvd_title(),
+									new MasterDVD(id, transac.getQuantity(),
+											transac.getQuantity(), transac
+													.getStatus(), transac
+													.getPrice(), transac
+													.getDvd_title()));
 				} else {
 
 					/* check if DVD title exist in old master DVD file */
 					if (mdvd == null)
-						throw new FatalBackEndException("Title \"" + transac.getDvd_title() + 
-								"\" does not exist in Old Master DVD file.", FileType.OldMasterDVD);
+						throw new FatalBackEndException("Title \""
+								+ transac.getDvd_title()
+								+ "\" does not exist in Old Master DVD file.",
+								FileType.OldMasterDVD);
 
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
@@ -130,11 +170,9 @@ public class BackEndEngine implements iBackEnd {
 		} catch (IOException ex) {
 			throw new FatalBackEndException(ex.getMessage(),
 					FileType.MergedTransactionFile);
-		}
-		catch (DVDFormatException exdvd) {
+		} catch (DVDFormatException exdvd) {
 			throw new ConstraintFailedException(exdvd.getMessage(), transac);
-		}
-		catch (TransactionFormatException dex) {
+		} catch (TransactionFormatException dex) {
 			throw new FatalBackEndException(dex.getMessage(),
 					FileType.MergedTransactionFile);
 		} catch (DataFormatException impex) {
@@ -174,13 +212,15 @@ public class BackEndEngine implements iBackEnd {
 			try {
 				mdf.write(mdvd.toString() + "\n");
 			} catch (IOException e1) {
-				throw new FatalBackEndException(e1.getMessage(), FileType.NewMasterDVD);
+				throw new FatalBackEndException(e1.getMessage(),
+						FileType.NewMasterDVD);
 			}
 			if (mdvd.getCount() != 0) {
 				try {
 					cdf.write(((CurrentDVD) mdvd).toString() + "\n");
 				} catch (IOException e) {
-					throw new FatalBackEndException(e.getMessage(), FileType.CurrentDVD);
+					throw new FatalBackEndException(e.getMessage(),
+							FileType.CurrentDVD);
 				}
 			}
 		}
