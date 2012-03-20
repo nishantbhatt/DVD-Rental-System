@@ -72,6 +72,9 @@ public class BackEndEngine implements iBackEnd {
 					int id = 0;
 					if (!removeMasterDVDs.isEmpty())
 						id = removeMasterDVDs.poll();
+					else
+						id = masterList.size();
+					
 					/* add master DVD */
 					masterList.put(transac.getDvd_title(), new MasterDVD(id, transac.getQuantity(), transac.getQuantity(), 
 							transac.getStatus(), transac.getPrice(), transac.getDvd_title()));
