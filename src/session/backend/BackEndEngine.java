@@ -13,6 +13,7 @@ import java.util.zip.DataFormatException;
 
 import iodvd.*;
 import iodvd.exception.DVDFormatException;
+import iodvd.exception.TransactionFormatException;
 
 public class BackEndEngine implements iBackEnd {
 
@@ -118,9 +119,11 @@ public class BackEndEngine implements iBackEnd {
 		catch (DVDFormatException exdvd) {
 			throw new ConstraintFailedException(exdvd.getMessage(), transac);
 		}
-		catch (DataFormatException dex) {
+		catch (TransactionFormatException dex) {
 			throw new FatalBackEndException(dex.getMessage(),
 					FileType.MergedTransactionFile);
+		} catch (DataFormatException impex) {
+			throw new IllegalArgumentException(impex.getMessage());
 		}
 	}
 
