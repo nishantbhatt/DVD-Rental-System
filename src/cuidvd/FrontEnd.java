@@ -14,7 +14,7 @@ import utilsdvd.GlobalFiles;
  * 
  * @author 100413064 (Shivam Kalra), 100400174 (Nishant Bhatt)
  */
-public class DVDRentalSystem {
+public class FrontEnd {
 
 	/**
 	 * Error string.
