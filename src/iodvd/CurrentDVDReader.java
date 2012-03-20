@@ -1,9 +1,11 @@
 package iodvd;
 
+import iodvd.exception.DVDFormatException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.zip.DataFormatException;
+
 /**
  * Provides a functionality to read DVD information from Current DVD File.
  * @author 100413064
@@ -23,7 +25,7 @@ public class CurrentDVDReader extends BufferedReader implements iFileReader<Curr
 	 * @see iodvd.iFileReader#readNext()
 	 */
 	@Override
-	public CurrentDVD readNext() throws IOException, DataFormatException {
+	public CurrentDVD readNext() throws IOException, DVDFormatException {
 		String _next = super.readLine();
 		
 		if(_next == null)
@@ -31,7 +33,7 @@ public class CurrentDVDReader extends BufferedReader implements iFileReader<Curr
 		
 		/* Check if every line is exactly 39 characters long */
 		if(_next.length() != 39)
-			throw new DataFormatException("Wrong format of Current DVD File.");
+			throw new DVDFormatException("Wrong format of Current DVD File.");
 		
 		/* Extract information as per the format specified in requirement domcumentation */
 		String title = _next.substring(0, 25);
@@ -55,7 +57,7 @@ public class CurrentDVDReader extends BufferedReader implements iFileReader<Curr
 			
 			_price = Double.parseDouble(price);
 		} catch(Exception ex) {
-			throw new DataFormatException("Wrong format of Current DVD File.");
+			throw new DVDFormatException("Wrong format of Current DVD File.");
 		}
 		
 		/* return a new DVD */
