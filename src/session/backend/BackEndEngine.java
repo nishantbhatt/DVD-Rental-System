@@ -14,10 +14,13 @@ import java.util.zip.DataFormatException;
 import iodvd.*;
 import iodvd.exception.DVDFormatException;
 import iodvd.exception.TransactionFormatException;
+
 /**
- * This class is the heart of back-end session that processes all the back end transactions.
+ * This class is the heart of back-end session that processes all the back end
+ * transactions.
+ * 
  * @author nishantbhatt
- *
+ * 
  */
 public class BackEndEngine implements iBackEnd {
 
@@ -25,12 +28,15 @@ public class BackEndEngine implements iBackEnd {
 	 * Hashmap structure that stores Master DVD data.
 	 */
 	HashMap<String, MasterDVD> masterList = new HashMap<String, MasterDVD>();
-	
+
 	/**
 	 * 
-	 * @param transac_files Transaction files that holds all back-end transactions.
-	 * @param merged_transac_file Transaction files after they have been merged.
-	 * @throws FatalBackEndException Exceptions that occur during back-end transactions.
+	 * @param transac_files
+	 *            Transaction files that holds all back-end transactions.
+	 * @param merged_transac_file
+	 *            Transaction files after they have been merged.
+	 * @throws FatalBackEndException
+	 *             Exceptions that occur during back-end transactions.
 	 */
 	public static void merge(String[] transac_files, String merged_transac_file)
 			throws FatalBackEndException {
@@ -46,7 +52,8 @@ public class BackEndEngine implements iBackEnd {
 			try {
 				tfr = new DVDTransactionReader(new FileReader(transac_files[i]));
 			} catch (FileNotFoundException e) {
-				throw new FatalBackEndException(e.getMessage(), FileType.TransactionFile, transac_files[i]);
+				throw new FatalBackEndException(e.getMessage(),
+						FileType.TransactionFile, transac_files[i]);
 			}
 			DVDTransaction transac;
 			try {
@@ -54,14 +61,17 @@ public class BackEndEngine implements iBackEnd {
 					try {
 						fwrt.write(transac.toString() + "\n");
 					} catch (IOException e) {
-						throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile, merged_transac_file);
+						throw new FatalBackEndException(e.getMessage(),
+								FileType.MergedTransactionFile,
+								merged_transac_file);
 					}
 				}
-			}
-			catch (IOException ex) {
-				throw new FatalBackEndException(ex.getMessage(), FileType.TransactionFile, transac_files[i]);
+			} catch (IOException ex) {
+				throw new FatalBackEndException(ex.getMessage(),
+						FileType.TransactionFile, transac_files[i]);
 			} catch (DataFormatException exx) {
-				throw new FatalBackEndException(exx.getMessage(), FileType.TransactionFile, transac_files[i]);
+				throw new FatalBackEndException(exx.getMessage(),
+						FileType.TransactionFile, transac_files[i]);
 			}
 		}
 	}
