@@ -28,9 +28,9 @@ public class BackEndEngine implements iBackEnd {
 	
 	/**
 	 * 
-	 * @param transac_files Transaction files that holds all backend transactions.
+	 * @param transac_files Transaction files that holds all back-end transactions.
 	 * @param merged_transac_file Transaction files after they have been merged.
-	 * @throws FatalBackEndException Exceptions that occur during backend transactions.
+	 * @throws FatalBackEndException Exceptions that occur during back-end transactions.
 	 */
 	public static void merge(String[] transac_files, String merged_transac_file)
 			throws FatalBackEndException {
