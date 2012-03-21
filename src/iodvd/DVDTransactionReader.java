@@ -6,9 +6,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * Provides a functionality to read transaction information from DVD Transaction File.
+ * @author shivam
+ *
+ */
 public class DVDTransactionReader extends BufferedReader implements
 		iFileReader<DVDTransaction> {
 
+	/**
+	 * Public constructor
+	 * @param arg0 source containing DVD transactions.
+	 */
 	public DVDTransactionReader(Reader arg0) {
 		super(arg0);
 	}
