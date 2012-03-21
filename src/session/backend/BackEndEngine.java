@@ -74,6 +74,12 @@ public class BackEndEngine implements iBackEnd {
 						FileType.TransactionFile, transac_files[i]);
 			}
 		}
+		
+		try {
+			fwrt.close();
+		} catch (IOException e) {
+			throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile, merged_transac_file);
+		}
 	}
 
 	@Override
@@ -229,6 +235,19 @@ public class BackEndEngine implements iBackEnd {
 							FileType.CurrentDVD, currentDVDFile);
 				}
 			}
+		}
+		
+		try {
+			mdf.close();
+		} catch (IOException e) {
+			throw new FatalBackEndException(e.getMessage(),
+					FileType.NewMasterDVD, masterDVDFile);
+		}
+		try {
+			cdf.close();
+		} catch (IOException e) {
+			throw new FatalBackEndException(e.getMessage(),
+					FileType.CurrentDVD, currentDVDFile);
 		}
 	}
 }
