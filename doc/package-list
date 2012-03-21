@@ -1,4 +1,6 @@
 cuidvd
 iodvd
-sessiondvd
+iodvd.exception
+session.backend
+session.frontend
 utilsdvd
