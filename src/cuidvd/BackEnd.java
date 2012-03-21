@@ -82,15 +82,15 @@ public class BackEnd {
 								+ ", File Type = "
 								+ ex.getFileType().NAME()
 								+ ", File Name = "
-								+ ex.getFileName() + "\n");
+								+ ex.getFileName());
 			} catch (ConstraintFailedException exx) {
 				_error = true;
 				System.err
 						.println("Error: Error Type = Constrained Failed, Message = "
-								+ exx.getMessage() + "\n");
+								+ exx.getMessage());
 			} catch (Exception exxx) {
 				_error = true;
-				System.err.println(exxx.getMessage() + "\n");
+				System.err.println(exxx.getMessage());
 			}
 		}
 	}
