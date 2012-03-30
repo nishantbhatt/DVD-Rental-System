@@ -233,7 +233,6 @@ public class BackEndEngine implements iBackEnd {
 			try {
 				cdf.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			throw new FatalBackEndException(ex.getMessage(),
