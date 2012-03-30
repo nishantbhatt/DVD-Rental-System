@@ -278,8 +278,8 @@ public class BackEndEngine implements iBackEnd {
 							FileType.NewMasterDVD, masterDVDFile);
 				}
 				try {
-					CurrentDVD _current = mdvd.get_cdvd();
-					cdf.write(_current.toString() + "\n");
+					cdf.write(mdvd.get_cdvd().toString() + "\n");
+					System.out.println(mdvd.get_cdvd().toString());
 				} catch (IOException e) {
 					throw new FatalBackEndException(e.getMessage(),
 							FileType.CurrentDVD, currentDVDFile);
@@ -292,7 +292,7 @@ public class BackEndEngine implements iBackEnd {
 				ex.printStackTrace();
 			}
 			try {
-				mdf.close();
+				cdf.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
