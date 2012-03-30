@@ -95,11 +95,10 @@ public class BackEndEngine implements iBackEnd {
 						FileType.TransactionFile, transac_files[i]);
 			}
 		}
-		
-		
+
 		try {
-			DVDTransaction logout = new DVDTransaction(TransactionID.LOGOUT, "", 0,
-					DVDStatus.NA, 0.0);
+			DVDTransaction logout = new DVDTransaction(TransactionID.LOGOUT,
+					"", 0, DVDStatus.NA, 0.0);
 			fwrt.write(logout + "\n");
 		} catch (IOException e) {
 			throw new FatalBackEndException(e.getMessage(),
@@ -194,20 +193,28 @@ public class BackEndEngine implements iBackEnd {
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
 					case RENT:
-						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() - transac.getQuantity());
+						mdvd.get_cdvd().setCount(
+								mdvd.get_cdvd().getCount()
+										- transac.getQuantity());
 						break;
 					case RETURN:
-						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() + transac.getQuantity());
+						mdvd.get_cdvd().setCount(
+								mdvd.get_cdvd().getCount()
+										+ transac.getQuantity());
 						break;
 					case REMOVE:
 						masterList.remove(transac.getDvd_title());
 						removeMasterDVDs.add(mdvd.getId());
 						break;
 					case BUY:
-						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() - transac.getQuantity());
+						mdvd.get_cdvd().setCount(
+								mdvd.get_cdvd().getCount()
+										- transac.getQuantity());
 						break;
 					case ADD:
-						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() + transac.getQuantity());
+						mdvd.get_cdvd().setCount(
+								mdvd.get_cdvd().getCount()
+										+ transac.getQuantity());
 						break;
 					case SELL:
 						mdvd.get_cdvd().setStatus(DVDStatus.SALE);
@@ -258,17 +265,16 @@ public class BackEndEngine implements iBackEnd {
 			MasterDVD temp = iter.next();
 			sorted_list.put(temp.getId(), temp);
 		}
-		
+
 		try {
-		for (Integer i : sorted_list.keySet()) {
-			MasterDVD mdvd = sorted_list.get(i);
-			try {
-				mdf.write(mdvd.toString() + "\n");
-			} catch (IOException e1) {
-				throw new FatalBackEndException(e1.getMessage(),
-						FileType.NewMasterDVD, masterDVDFile);
-			}
-			if (mdvd.get_cdvd().getCount() != 0) {
+			for (Integer i : sorted_list.keySet()) {
+				MasterDVD mdvd = sorted_list.get(i);
+				try {
+					mdf.write(mdvd.toString() + "\n");
+				} catch (IOException e1) {
+					throw new FatalBackEndException(e1.getMessage(),
+							FileType.NewMasterDVD, masterDVDFile);
+				}
 				try {
 					CurrentDVD _current = mdvd.get_cdvd();
 					cdf.write(_current.toString() + "\n");
@@ -277,7 +283,6 @@ public class BackEndEngine implements iBackEnd {
 							FileType.CurrentDVD, currentDVDFile);
 				}
 			}
-		}
 		} finally {
 			try {
 				mdf.close();
