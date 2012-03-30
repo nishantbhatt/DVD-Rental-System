@@ -49,6 +49,8 @@ public class MasterDVD  {
 	 */
 	public void setRemaining_quantity(int remaining_quantity) throws DVDFormatException {
 		cui.setCount(remaining_quantity);
+		if(remaining_quantity > total_quantity)
+			this.setTotal_quantity(remaining_quantity);
 	}
 
 	/**
