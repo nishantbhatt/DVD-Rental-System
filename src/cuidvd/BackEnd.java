@@ -69,7 +69,7 @@ public class BackEnd {
 								"Write: write <Current DVD File> <New Master DVD File>");
 					session.write(commands[0], commands[1]);
 					System.out.println("Write command completed.");
-				} else if (_next.equalsIgnoreCase("quit")) {
+				} else if (action.equalsIgnoreCase("quit")) {
 					System.exit(_error ? 1 : 0);
 				} else
 					throw new IllegalArgumentException("Undefined command: "
