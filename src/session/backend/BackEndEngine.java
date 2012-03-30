@@ -279,7 +279,6 @@ public class BackEndEngine implements iBackEnd {
 				}
 				try {
 					cdf.write(mdvd.get_cdvd().toString() + "\n");
-					System.out.println(mdvd.get_cdvd().toString());
 				} catch (IOException e) {
 					throw new FatalBackEndException(e.getMessage(),
 							FileType.CurrentDVD, currentDVDFile);

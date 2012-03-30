@@ -221,7 +221,7 @@ class AdminSession extends StandardSession implements pSession {
 		/* add to transactions */
 		try {
 			transactions.add(new DVDTransaction(TransactionID.REMOVE, title,
-					cdvd.getCount(), cdvd.getStatus(), cdvd.getPrice()));
+					0, cdvd.getStatus(), cdvd.getPrice()));
 		} catch (TransactionFormatException e) {
 			throw new IllegalArgumentException(e.getMessage());
 		}

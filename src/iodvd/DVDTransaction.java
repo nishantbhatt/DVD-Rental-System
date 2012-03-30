@@ -39,6 +39,8 @@ public class DVDTransaction {
 			int quantity, DVDStatus status, double price) throws TransactionFormatException {
 		this.trans_id = trans_id;
 		try {
+			if(quantity > 999)
+				throw new DVDFormatException("Maximum of 999 DVDs in one transaction.");
 			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 		} catch (DVDFormatException e) {
 			throw new TransactionFormatException(e.getMessage());
@@ -76,6 +78,8 @@ public class DVDTransaction {
 			throw new IllegalArgumentException("Invalid Transaction ID.");
 		}
 		try {
+			if(quantity > 999)
+				throw new DVDFormatException("Maximum of 999 DVDs in one transaction.");
 			cdvd = new CurrentDVD(dvd_title, price, quantity, status);
 		} catch (DVDFormatException e) {
 			throw new TransactionFormatException(e.getMessage());
