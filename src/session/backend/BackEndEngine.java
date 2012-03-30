@@ -40,25 +40,35 @@ public class BackEndEngine implements iBackEnd {
 	 */
 	public static void merge(String[] transac_files, String merged_transac_file)
 			throws FatalBackEndException {
+		/* DVD Transaction reader */
 		iFileReader<DVDTransaction> tfr;
+		/* File Writer */
 		FileWriter fwrt;
 		try {
+			/* Initialise the file writer */
 			fwrt = new FileWriter(merged_transac_file);
 		} catch (IOException e) {
 			throw new FatalBackEndException(e.getMessage(),
 					FileType.MergedTransactionFile, merged_transac_file);
 		}
+
+		/* Iterate through all the transaction files */
 		for (int i = 0; i < transac_files.length; i++) {
 			try {
+				/* Initialise the transaction reader */
 				tfr = new DVDTransactionReader(new FileReader(transac_files[i]));
 			} catch (FileNotFoundException e) {
 				throw new FatalBackEndException(e.getMessage(),
 						FileType.TransactionFile, transac_files[i]);
 			}
+			/* DVD Transaction object */
 			DVDTransaction transac;
 			try {
+				/* Read the DVD Transaction */
 				while ((transac = tfr.readNext()) != null) {
 					try {
+						/* Write to merged DVD Transaction file */
+						/* An IO exception is caught here */
 						fwrt.write(transac.toString() + "\n");
 					} catch (IOException e) {
 						throw new FatalBackEndException(e.getMessage(),
@@ -66,19 +76,31 @@ public class BackEndEngine implements iBackEnd {
 								merged_transac_file);
 					}
 				}
+				tfr.close();
 			} catch (IOException ex) {
+				try {
+					fwrt.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				throw new FatalBackEndException(ex.getMessage(),
 						FileType.TransactionFile, transac_files[i]);
 			} catch (DataFormatException exx) {
+				try {
+					fwrt.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				throw new FatalBackEndException(exx.getMessage(),
 						FileType.TransactionFile, transac_files[i]);
 			}
 		}
-		
+
 		try {
 			fwrt.close();
 		} catch (IOException e) {
-			throw new FatalBackEndException(e.getMessage(), FileType.MergedTransactionFile, merged_transac_file);
+			throw new FatalBackEndException(e.getMessage(),
+					FileType.MergedTransactionFile, merged_transac_file);
 		}
 	}
 
@@ -237,7 +259,7 @@ public class BackEndEngine implements iBackEnd {
 				}
 			}
 		}
-		
+
 		try {
 			mdf.close();
 		} catch (IOException e) {
