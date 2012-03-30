@@ -131,7 +131,7 @@ public class BackEndEngine implements iBackEnd {
 			MasterDVD mdf;
 			masterList = new HashMap<String, MasterDVD>();
 			while ((mdf = ofr.readNext()) != null)
-				masterList.put(mdf.getTitle(), mdf);
+				masterList.put(mdf.get_cdvd().getTitle(), mdf);
 		} catch (Exception ex) {
 			masterList = null;
 			throw new FatalBackEndException(ex.getMessage(),
@@ -181,24 +181,24 @@ public class BackEndEngine implements iBackEnd {
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
 					case RENT:
-						mdvd.setCount(mdvd.getCount() - transac.getQuantity());
+						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() - transac.getQuantity());
 						break;
 					case RETURN:
-						mdvd.setCount(mdvd.getCount() + transac.getQuantity());
+						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() + transac.getQuantity());
 						break;
 					case REMOVE:
 						masterList.remove(transac.getDvd_title());
 						removeMasterDVDs.add(mdvd.getId());
 						break;
 					case BUY:
-						mdvd.setCount(mdvd.getCount() - transac.getQuantity());
+						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() - transac.getQuantity());
 						break;
 					case ADD:
-						mdvd.setCount(mdvd.getCount() + transac.getQuantity());
+						mdvd.get_cdvd().setCount(mdvd.get_cdvd().getCount() + transac.getQuantity());
 						break;
 					case SELL:
-						mdvd.setStatus(DVDStatus.SALE);
-						mdvd.setPrice(transac.getPrice());
+						mdvd.get_cdvd().setStatus(DVDStatus.SALE);
+						mdvd.get_cdvd().setPrice(transac.getPrice());
 						break;
 					}
 				}
@@ -230,6 +230,12 @@ public class BackEndEngine implements iBackEnd {
 		try {
 			mdf = new FileWriter(masterDVDFile);
 		} catch (IOException ex) {
+			try {
+				cdf.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			throw new FatalBackEndException(ex.getMessage(),
 					FileType.NewMasterDVD, masterDVDFile);
 		}
@@ -240,7 +246,8 @@ public class BackEndEngine implements iBackEnd {
 			MasterDVD temp = iter.next();
 			sorted_list.put(temp.getId(), temp);
 		}
-
+		
+		try {
 		for (Integer i : sorted_list.keySet()) {
 			MasterDVD mdvd = sorted_list.get(i);
 			try {
@@ -249,9 +256,9 @@ public class BackEndEngine implements iBackEnd {
 				throw new FatalBackEndException(e1.getMessage(),
 						FileType.NewMasterDVD, masterDVDFile);
 			}
-			if (mdvd.getCount() != 0) {
+			if (mdvd.get_cdvd().getCount() != 0) {
 				try {
-					CurrentDVD _current = mdvd;
+					CurrentDVD _current = mdvd.get_cdvd();
 					cdf.write(_current.toString() + "\n");
 				} catch (IOException e) {
 					throw new FatalBackEndException(e.getMessage(),
@@ -259,18 +266,17 @@ public class BackEndEngine implements iBackEnd {
 				}
 			}
 		}
-
-		try {
-			mdf.close();
-		} catch (IOException e) {
-			throw new FatalBackEndException(e.getMessage(),
-					FileType.NewMasterDVD, masterDVDFile);
-		}
-		try {
-			cdf.close();
-		} catch (IOException e) {
-			throw new FatalBackEndException(e.getMessage(),
-					FileType.CurrentDVD, currentDVDFile);
+		} finally {
+			try {
+				mdf.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			try {
+				mdf.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }
