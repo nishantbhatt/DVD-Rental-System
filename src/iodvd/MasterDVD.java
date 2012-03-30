@@ -94,7 +94,7 @@ public class MasterDVD  {
 	public String toString() {
 		/* writes the master DVD information as per the requirement document */
 		DecimalFormat money_format = new DecimalFormat("000.00");
-		String _return = String.format("%05d %04d %04d %1s %s %-25s", cui.count,
+		String _return = String.format("%05d %04d %04d %1s %s %-25s", this.id,
 				getRemaining_quantity(), getTotal_quantity(), cui.status.SYMBOL(),
 				money_format.format(cui.price), cui.title);
 
