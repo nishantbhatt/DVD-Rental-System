@@ -6,9 +6,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * Provides a functionality to read transaction information from DVD Transaction File.
+ * @author shivam
+ *
+ */
 public class DVDTransactionReader extends BufferedReader implements
 		iFileReader<DVDTransaction> {
 
+	/**
+	 * Public constructor
+	 * @param arg0 source containing DVD transactions.
+	 */
 	public DVDTransactionReader(Reader arg0) {
 		super(arg0);
 	}
@@ -41,7 +50,10 @@ public class DVDTransactionReader extends BufferedReader implements
 		/* Try and parse all the above extracted information */
 		try {
 			_transaction_code = Integer.parseInt(transaction_code);
-			_price = Integer.parseInt(price);
+			/* if end of transaction file has reached */
+			if(_transaction_code == 0)
+				return null;
+			_price = Double.parseDouble(price);
 			_quantity = Integer.parseInt(quantity);
 
 			if (status.equalsIgnoreCase("R"))
@@ -51,19 +63,18 @@ public class DVDTransactionReader extends BufferedReader implements
 			else
 				throw new Exception();
 
-			_price = Double.parseDouble(price);
 		} catch (Exception ex) {
 			throw new TransactionFormatException(
 					"Wrong format of DVD Transaction File.");
 		}
 
-		/* if end of transaction file has reached */
-		if (_transaction_code == 0)
-			return null;
-
 		/* return a new Transaction */
 		return new DVDTransaction(_transaction_code, title.trim(), _quantity,
 				_status, _price);
+	}
+	
+	public void close() throws IOException {
+		super.close();
 	}
 
 }

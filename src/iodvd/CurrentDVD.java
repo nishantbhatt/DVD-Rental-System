@@ -54,7 +54,7 @@ public class CurrentDVD {
 					"DVD title must not be more than 25 characters.");
 		if (count < 0 || count > 9999)
 			throw new DVDFormatException(
-					"DVD quantity must be betwene 0 - 999.");
+					"DVD quantity must be betwene 0 - 9999");
 
 		this.status = status;
 		this.price = price;
@@ -80,8 +80,8 @@ public class CurrentDVD {
 	 * @throws DVDPriceFormatException
 	 */
 	public void setPrice(double price) throws DVDFormatException {
-		if (price < 0)
-			throw new DVDFormatException("DVD price must be between 0 - 999");
+		if (price < 0 || price > 999.99)
+		throw new DVDFormatException("DVD count must be between 0 - 999.99.");
 		this.price = price;
 	}
 
@@ -93,9 +93,8 @@ public class CurrentDVD {
 	 * @throws DVDCountFormatException
 	 */
 	public void setCount(int count) throws DVDFormatException {
-		if (count < 0 || count > 999.99)
-			throw new DVDFormatException(
-					"DVD count must be between 0 - 999.99.");
+		if (count < 0 || count > 9999)
+			throw new DVDFormatException("DVD quantity must be betwene 0 - 9999");
 		this.count = count;
 	}
 
