@@ -193,12 +193,12 @@ public class BackEndEngine implements iBackEnd {
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
 					case RENT:
-						mdvd.get_cdvd().setCount(
+						mdvd.setRemaining_quantity(
 								mdvd.get_cdvd().getCount()
 										- transac.getQuantity());
 						break;
 					case RETURN:
-						mdvd.get_cdvd().setCount(
+						mdvd.setRemaining_quantity(
 								mdvd.get_cdvd().getCount()
 										+ transac.getQuantity());
 						break;
@@ -207,11 +207,13 @@ public class BackEndEngine implements iBackEnd {
 						removeMasterDVDs.add(mdvd.getId());
 						break;
 					case BUY:
-						mdvd.get_cdvd().setCount(
+						mdvd.setTotal_quantity(mdvd.getTotal_quantity() - transac.getQuantity());
+						mdvd.setRemaining_quantity(
 								mdvd.get_cdvd().getCount()
 										- transac.getQuantity());
 						break;
 					case ADD:
+						mdvd.setTotal_quantity(mdvd.getRemaining_quantity() + transac.getQuantity());
 						mdvd.get_cdvd().setCount(
 								mdvd.get_cdvd().getCount()
 										+ transac.getQuantity());
