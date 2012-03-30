@@ -63,4 +63,8 @@ public class CurrentDVDReader extends BufferedReader implements iFileReader<Curr
 		/* return a new DVD */
 		return new CurrentDVD(title.trim(), _price, _quantity, _status);
 	}
+	
+	public void close() throws IOException {
+		super.close();
+	}
 }

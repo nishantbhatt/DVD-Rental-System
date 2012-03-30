@@ -7,10 +7,23 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.HashSet;
 
+/**
+ * Provides a functionality to read master DVD information from Master DVD File.
+ * @author shivam
+ *
+ */
 public class MasterDVDReader extends BufferedReader implements
 		iFileReader<MasterDVD> {
 
+	/**
+	 * To make sure that none of the DVD title is repeated.
+	 */
 	HashSet<String> dvds;
+	
+	/**
+	 * Public constructor
+	 * @param arg0 source of master DVD list.
+	 */
 	public MasterDVDReader(Reader arg0) {
 		super(arg0);
 		dvds = new HashSet<String>();
