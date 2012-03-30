@@ -95,12 +95,25 @@ public class BackEndEngine implements iBackEnd {
 						FileType.TransactionFile, transac_files[i]);
 			}
 		}
-
+		
+		
 		try {
-			fwrt.close();
+			DVDTransaction logout = new DVDTransaction(TransactionID.LOGOUT, "", 0,
+					DVDStatus.NA, 0.0);
+			fwrt.write(logout + "\n");
 		} catch (IOException e) {
 			throw new FatalBackEndException(e.getMessage(),
 					FileType.MergedTransactionFile, merged_transac_file);
+		} catch (TransactionFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				fwrt.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
