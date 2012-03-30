@@ -9,8 +9,12 @@ import java.text.DecimalFormat;
  * @author shivam
  *
  */
-public class MasterDVD extends CurrentDVD {
+public class MasterDVD  {
 	
+	/**
+	 * Current DVD file.
+	 */
+	CurrentDVD cui = null;
 	/**
 	 * Get total number of DVDs in inventory.
 	 * @return total number of DVD
@@ -35,7 +39,7 @@ public class MasterDVD extends CurrentDVD {
 	 * @return count of remaining number of DVDs.
 	 */
 	public int getRemaining_quantity() {
-		return super.getCount();
+		return cui.getCount();
 	}
 
 	/**
@@ -44,7 +48,7 @@ public class MasterDVD extends CurrentDVD {
 	 * @throws DVDFormatException if violates the bounds.
 	 */
 	public void setRemaining_quantity(int remaining_quantity) throws DVDFormatException {
-		super.setCount(remaining_quantity);
+		cui.setCount(remaining_quantity);
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class MasterDVD extends CurrentDVD {
 	public MasterDVD(int id, int remaining_quantity, int total_quantity,
 			DVDStatus status, double price, String title)
 			throws DVDFormatException {
-		super(title, price, remaining_quantity, status);
+		cui = new CurrentDVD(title, price, remaining_quantity, status);
 		this.id = id;
 		this.total_quantity = total_quantity;
 	}
@@ -88,10 +92,18 @@ public class MasterDVD extends CurrentDVD {
 	public String toString() {
 		/* writes the master DVD information as per the requirement document */
 		DecimalFormat money_format = new DecimalFormat("000.00");
-		String _return = String.format("%05d %04d %04d %1s %s %-25s", ++count,
-				getRemaining_quantity(), getTotal_quantity(), status.SYMBOL(),
-				money_format.format(price), title);
+		String _return = String.format("%05d %04d %04d %1s %s %-25s", cui.count,
+				getRemaining_quantity(), getTotal_quantity(), cui.status.SYMBOL(),
+				money_format.format(cui.price), cui.title);
 
 		return _return;
+	}
+	
+	/**
+	 * Get current DVD
+	 * @return
+	 */
+	public CurrentDVD get_cdvd() {
+		return cui;
 	}
 }

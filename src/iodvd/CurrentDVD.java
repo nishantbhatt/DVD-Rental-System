@@ -81,8 +81,7 @@ public class CurrentDVD {
 	 */
 	public void setPrice(double price) throws DVDFormatException {
 		if (price < 0 || price > 999.99)
-		throw new DVDFormatException(
-				"DVD count must be between 0 - 999.99.");
+		throw new DVDFormatException("DVD count must be between 0 - 999.99.");
 		this.price = price;
 	}
 
@@ -95,8 +94,7 @@ public class CurrentDVD {
 	 */
 	public void setCount(int count) throws DVDFormatException {
 		if (count < 0 || count > 9999)
-			throw new DVDFormatException(
-					"DVD quantity must be betwene 0 - 9999");
+			throw new DVDFormatException("DVD quantity must be betwene 0 - 9999");
 		this.count = count;
 	}
 
