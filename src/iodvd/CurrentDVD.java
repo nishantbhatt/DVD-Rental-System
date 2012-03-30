@@ -133,7 +133,8 @@ public class CurrentDVD {
 	public String getTitle() {
 		return title;
 	}
-
+	
+	@Override
 	public String toString() {
 		/* writes the Current DVD information as per the requirement document */
 		DecimalFormat money_format = new DecimalFormat("000.00");
