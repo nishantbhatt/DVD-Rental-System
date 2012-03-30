@@ -72,5 +72,9 @@ public class DVDTransactionReader extends BufferedReader implements
 		return new DVDTransaction(_transaction_code, title.trim(), _quantity,
 				_status, _price);
 	}
+	
+	public void close() throws IOException {
+		super.close();
+	}
 
 }
