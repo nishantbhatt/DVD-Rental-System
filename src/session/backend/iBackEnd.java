@@ -1,5 +1,10 @@
 package session.backend;
 
+import iodvd.MasterDVD;
+
+import java.util.Iterator;
+import java.util.Set;
+
 /**
  * The interface for back-end session.
  * 
@@ -20,8 +25,9 @@ public interface iBackEnd {
 	 * @throws ConstraintFailedException
 	 *             All the constrain exceptions that occurs during that back-end
 	 *             session.
+	 * @return Set of processed data
 	 */
-	public void process(String transacFile, String masterDVDFile)
+	public Set<MasterDVD> process(String transacFile, String masterDVDFile)
 			throws FatalBackEndException, ConstraintFailedException;
 
 	/**

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import junit.framework.Assert;
 import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
@@ -74,12 +75,8 @@ public class BackEndEngineTest {
 					.merge(new String[] { t1.getAbsolutePath(),
 							t2.getAbsolutePath() }, mtf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.MergedTransactionFile)
-				throw ex;
+			Assert.assertEquals(ex.getFileName(), mtf.getName());
+			Assert.assertEquals(ex.getFileType(), FileType.MergedTransactionFile);
 		}
 	}
 
@@ -103,12 +100,8 @@ public class BackEndEngineTest {
 					.merge(new String[] { t1.getAbsolutePath(),
 							t2.getAbsolutePath() }, mtf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.TransactionFile)
-				throw ex;
+			Assert.assertEquals(ex.getFileName(), t1.getName());
+			Assert.assertEquals(ex.getFileType(), FileType.TransactionFile);
 		}
 	}
 
@@ -131,12 +124,8 @@ public class BackEndEngineTest {
 					.merge(new String[] { t1.getAbsolutePath(),
 							t2.getAbsolutePath() }, mtf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.TransactionFile)
-				throw ex;
+			Assert.assertEquals(ex.getFileName(), t1.getName());
+			Assert.assertEquals(ex.getFileType(), FileType.TransactionFile);
 		}
 	}
 }
