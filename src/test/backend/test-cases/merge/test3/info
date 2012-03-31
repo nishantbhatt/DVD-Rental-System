@@ -1,0 +1,1 @@
+Purpose: Test that an exception is thrown when one or more transaction files are not modifiable.
