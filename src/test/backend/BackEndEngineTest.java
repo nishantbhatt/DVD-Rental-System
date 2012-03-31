@@ -50,7 +50,7 @@ public class BackEndEngineTest {
 				mtf.getAbsolutePath());
 
 		/* assert that expected output matches with actual output */
-		assertReaders(new BufferedReader(new FileReader(t3)),
+		AssertUtils.assertReaders(new BufferedReader(new FileReader(t3)),
 				new BufferedReader(new FileReader(mtf)));
 	}
 
@@ -140,19 +140,5 @@ public class BackEndEngineTest {
 			if (ex.getFileType() != FileType.TransactionFile)
 				throw ex;
 		}
-	}
-
-	public static void assertReaders(BufferedReader expected,
-			BufferedReader actual) throws IOException {
-		String expectedLine;
-		while ((expectedLine = expected.readLine()) != null) {
-			String actualLine = actual.readLine();
-			assertNotNull("Expected had more lines then the actual.",
-					actualLine);
-			assertEquals(expectedLine, actualLine);
-		}
-
-		assertNull("Actual had more lines then the expected.",
-				actual.readLine());
 	}
 }
