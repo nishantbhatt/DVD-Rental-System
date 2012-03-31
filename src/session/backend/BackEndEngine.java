@@ -5,9 +5,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.zip.DataFormatException;
 
@@ -117,7 +119,7 @@ public class BackEndEngine implements iBackEnd {
 	}
 
 	@Override
-	public void process(String transacFile, String masterDVDFile)
+	public Set<MasterDVD> process(String transacFile, String masterDVDFile)
 			throws FatalBackEndException, ConstraintFailedException {
 		masterList = new HashMap<String, MasterDVD>();
 		iFileReader<MasterDVD> ofr;
@@ -193,27 +195,26 @@ public class BackEndEngine implements iBackEnd {
 					/* process all the transactions */
 					switch (transac.getTrans_id()) {
 					case RENT:
-						mdvd.setRemaining_quantity(
-								mdvd.get_cdvd().getCount()
-										- transac.getQuantity());
+						mdvd.setRemaining_quantity(mdvd.get_cdvd().getCount()
+								- transac.getQuantity());
 						break;
 					case RETURN:
-						mdvd.setRemaining_quantity(
-								mdvd.get_cdvd().getCount()
-										+ transac.getQuantity());
+						mdvd.setRemaining_quantity(mdvd.get_cdvd().getCount()
+								+ transac.getQuantity());
 						break;
 					case REMOVE:
 						masterList.remove(transac.getDvd_title());
 						removeMasterDVDs.add(mdvd.getId());
 						break;
 					case BUY:
-						mdvd.setTotal_quantity(mdvd.getTotal_quantity() - transac.getQuantity());
-						mdvd.setRemaining_quantity(
-								mdvd.get_cdvd().getCount()
-										- transac.getQuantity());
+						mdvd.setTotal_quantity(mdvd.getTotal_quantity()
+								- transac.getQuantity());
+						mdvd.setRemaining_quantity(mdvd.get_cdvd().getCount()
+								- transac.getQuantity());
 						break;
 					case ADD:
-						mdvd.setTotal_quantity(mdvd.getRemaining_quantity() + transac.getQuantity());
+						mdvd.setTotal_quantity(mdvd.getRemaining_quantity()
+								+ transac.getQuantity());
 						mdvd.get_cdvd().setCount(
 								mdvd.get_cdvd().getCount()
 										+ transac.getQuantity());
@@ -236,6 +237,12 @@ public class BackEndEngine implements iBackEnd {
 		} catch (DataFormatException impex) {
 			throw new IllegalArgumentException(impex.getMessage());
 		}
+		
+		Set<MasterDVD> _return = new HashSet<MasterDVD>();
+		for (String s : masterList.keySet())
+			_return.add(masterList.get(s));
+
+		return _return;
 	}
 
 	@Override
@@ -297,4 +304,5 @@ public class BackEndEngine implements iBackEnd {
 			}
 		}
 	}
+
 }

@@ -1,5 +1,6 @@
 package session.backend;
 
+import java.io.File;
 import java.io.IOException;
 /**
  * The class holds information about the exceptions that occurs during the back-end transaction 
@@ -25,7 +26,7 @@ public class FatalBackEndException extends IOException {
 	public FatalBackEndException(String message, FileType fileType, String fileName) {
 		super(message);
 		this.fileType = fileType;
-		this.fileName = fileName;
+		this.fileName = (new File(fileName)).getName();
 	}
 
 	public String getFileName() {

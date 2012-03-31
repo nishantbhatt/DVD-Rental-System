@@ -1,18 +1,34 @@
 package test.backend;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import iodvd.MasterDVD;
+import iodvd.MasterDVDReader;
+import iodvd.iFileReader;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.zip.DataFormatException;
 
+import junit.framework.Assert;
 import junit.framework.JUnit4TestAdapter;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import session.backend.BackEndEngine;
+import session.backend.ConstraintFailedException;
 import session.backend.FatalBackEndException;
 import session.backend.FileType;
+import session.backend.iBackEnd;
 
 public class ProcessTest {
 
@@ -24,119 +40,132 @@ public class ProcessTest {
 		return new JUnit4TestAdapter(ProcessTest.class);
 	}
 
+	iBackEnd backEnd = null;
+
+	@Before
+	public void initialize() {
+		backEnd = new BackEndEngine();
+	}
+
 	@Test
-	public void testMerge1() throws URISyntaxException, IOException {
-		/* load the file from the resource */
-		File t1 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test1/t1.tf").toURI());
-
-		/* load second transaction file */
-		File t2 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test1/t2.tf").toURI());
-
-		/* load expected transaction file */
-		File t3 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test1/mtf.ex").toURI());
+	public void testProcess1() throws URISyntaxException,
+			ConstraintFailedException, IOException {
+		/* load the merged transaction file */
+		File mtf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test1/mtf.tf").toURI());
 
 		/* create temporary file for actual transaction file */
-		File mtf = File.createTempFile("mtf", "tf");
+		File omf = File.createTempFile("omf", "tf");
+		omf.setReadable(false);
 		mtf.createNewFile();
 
-		/* merge the result */
-		BackEndEngine.merge(
-				new String[] { t1.getAbsolutePath(), t2.getAbsolutePath() },
-				mtf.getAbsolutePath());
-
-		/* assert that expected output matches with actual output */
-		AssertUtils.assertReaders(new BufferedReader(new FileReader(t3)),
-				new BufferedReader(new FileReader(mtf)));
+		/* process the result */
+		try {
+			backEnd.process(mtf.getAbsolutePath(), omf.getAbsolutePath());
+		} catch (FatalBackEndException ex) {
+			Assert.assertEquals(ex.getFileName(), omf.getName());
+			Assert.assertEquals(ex.getFileType(), FileType.OldMasterDVD);
+		}
 	}
 
 	/* When merged transaction file could not be written */
 	@Test
-	public void testMerge2() throws URISyntaxException, IOException {
-		/* load the file from the resource */
-		File t1 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test2/t1.tf").toURI());
+	public void testProcess2() throws URISyntaxException, IOException,
+			ConstraintFailedException {
 
-		/* load second transaction file */
-		File t2 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test2/t2.tf").toURI());
-		
-		/* create temporary file for actual transaction file */
+		/* create temporary merged transaction file */
 		File mtf = File.createTempFile("mtf", "tf");
-		mtf.setWritable(false);
+		mtf.setReadable(false);
 		mtf.deleteOnExit();
 
-		/* merge the result */
+		/* load the merged transaction file */
+		File omf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test2/omf.txt").toURI());
+
+		/* process the result */
 		try {
-			BackEndEngine
-					.merge(new String[] { t1.getAbsolutePath(),
-							t2.getAbsolutePath() }, mtf.getAbsolutePath());
+			backEnd.process(mtf.getAbsolutePath(), omf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.MergedTransactionFile)
-				throw ex;
+			/* names are equal */
+			Assert.assertEquals(ex.getFileName(), mtf.getName());
+			Assert.assertEquals(ex.getFileType(),
+					FileType.MergedTransactionFile);
 		}
 	}
 
 	/* When one of the transaction file is not READABLE or NOT EXISTS */
 	@Test
-	public void testMerge3() throws IOException, URISyntaxException {
-		/* load the file from the resource (NOT WRITABLE OR READABLE) */
-		File t1 = File.createTempFile("trf", "tf");
-		t1.setReadable(false);
-		t1.deleteOnExit();
+	public void testMerge3() throws IOException, URISyntaxException,
+			ConstraintFailedException {
+		/* load the merged transaction file */
+		File mtf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test3/mtf.tf").toURI());
 
-		/* load second transaction file */
-		File t2 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test3/t2.tf").toURI());
+		/* load the merged transaction file */
+		File omf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test3/omf.txt").toURI());
 
-		/* create temporary file for actual transaction file */
-		File mtf = File.createTempFile("mtf", "tf");
-
+		/* process the result */
 		try {
-			BackEndEngine
-					.merge(new String[] { t1.getAbsolutePath(),
-							t2.getAbsolutePath() }, mtf.getAbsolutePath());
+			backEnd.process(mtf.getAbsolutePath(), omf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.TransactionFile)
-				throw ex;
+			/* names are equal */
+			Assert.assertEquals(ex.getFileName(), omf.getName());
+			Assert.assertEquals(ex.getFileType(), FileType.OldMasterDVD);
 		}
 	}
 
-	/* When one of the transaction file has improper formats */
 	@Test
-	public void testMerge4() throws IOException, URISyntaxException {
-		/* load the file from the resource (NOT WRITABLE OR READABLE) */
-		File t1 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test4/t1.tf").toURI());
+	public void testMerge4() throws IOException, URISyntaxException,
+			ConstraintFailedException {
+		/* load the merged transaction file */
+		File mtf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test4/mtf.tf").toURI());
 
-		/* load second transaction file */
-		File t2 = new File(ProcessTest.class.getResource(
-				"test-cases/merge/test4/t2.tf").toURI());
+		/* load the merged transaction file */
+		File omf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test4/omf.txt").toURI());
 
-		/* create temporary file for actual transaction file */
-		File mtf = File.createTempFile("mtf", "tf");
-
+		/* process the result */
 		try {
-			BackEndEngine
-					.merge(new String[] { t1.getAbsolutePath(),
-							t2.getAbsolutePath() }, mtf.getAbsolutePath());
+			backEnd.process(mtf.getAbsolutePath(), omf.getAbsolutePath());
 		} catch (FatalBackEndException ex) {
-			/*
-			 * Fatal Back End Exception should corresponds to Merged Transaction
-			 * File only
-			 */
-			if (ex.getFileType() != FileType.TransactionFile)
-				throw ex;
+			/* names are equal */
+			Assert.assertEquals(ex.getFileName(), mtf.getName());
+			Assert.assertEquals(ex.getFileType(),
+					FileType.MergedTransactionFile);
 		}
+	}
+
+	@Test
+	public void testMerge5() throws IOException, URISyntaxException,
+			ConstraintFailedException, DataFormatException {
+		/* load the merged transaction file */
+		File mtf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test4/mtf.tf").toURI());
+
+		/* load the merged transaction file */
+		File omf = new File(ProcessTest.class.getResource(
+				"test-cases/process/test4/omf.txt").toURI());
+
+		Set<MasterDVD> masterDVD;
+		/* process the result */
+		masterDVD = backEnd.process(mtf.getAbsolutePath(),
+				omf.getAbsolutePath());
+		
+		assertListContained(new MasterDVDReader(new FileReader("")), masterDVD);
+	}
+
+	public static void assertListContained(iFileReader<MasterDVD> expected,
+			Set<MasterDVD> actual) throws IOException, DataFormatException {
+		MasterDVD expectedLine;
+		while ((expectedLine = expected.readNext()) != null) {
+			assertTrue("Actual file differ from expected.",
+					!actual.contains(expectedLine));
+			actual.remove(expectedLine);
+		}
+
+		assertTrue("Actual had more lines then the expected.",
+				actual.size() > 0);
 	}
 }
