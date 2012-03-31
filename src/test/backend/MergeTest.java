@@ -15,28 +15,28 @@ import session.backend.BackEndEngine;
 import session.backend.FatalBackEndException;
 import session.backend.FileType;
 
-public class BackEndEngineTest {
+public class MergeTest {
 
 	public static void main(String... args) {
 		junit.textui.TestRunner.run(suite());
 	}
 
 	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(BackEndEngineTest.class);
+		return new JUnit4TestAdapter(MergeTest.class);
 	}
 
 	@Test
 	public void testMerge1() throws URISyntaxException, IOException {
 		/* load the file from the resource */
-		File t1 = new File(BackEndEngineTest.class.getResource(
+		File t1 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test1/t1.tf").toURI());
 
 		/* load second transaction file */
-		File t2 = new File(BackEndEngineTest.class.getResource(
+		File t2 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test1/t2.tf").toURI());
 
 		/* load expected transaction file */
-		File t3 = new File(BackEndEngineTest.class.getResource(
+		File t3 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test1/mtf.ex").toURI());
 
 		/* create temporary file for actual transaction file */
@@ -57,11 +57,11 @@ public class BackEndEngineTest {
 	@Test
 	public void testMerge2() throws URISyntaxException, IOException {
 		/* load the file from the resource */
-		File t1 = new File(BackEndEngineTest.class.getResource(
+		File t1 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test2/t1.tf").toURI());
 
 		/* load second transaction file */
-		File t2 = new File(BackEndEngineTest.class.getResource(
+		File t2 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test2/t2.tf").toURI());
 		
 		/* create temporary file for actual transaction file */
@@ -89,7 +89,7 @@ public class BackEndEngineTest {
 		t1.deleteOnExit();
 
 		/* load second transaction file */
-		File t2 = new File(BackEndEngineTest.class.getResource(
+		File t2 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test3/t2.tf").toURI());
 
 		/* create temporary file for actual transaction file */
@@ -109,11 +109,11 @@ public class BackEndEngineTest {
 	@Test
 	public void testMerge4() throws IOException, URISyntaxException {
 		/* load the file from the resource (NOT WRITABLE OR READABLE) */
-		File t1 = new File(BackEndEngineTest.class.getResource(
+		File t1 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test4/t1.tf").toURI());
 
 		/* load second transaction file */
-		File t2 = new File(BackEndEngineTest.class.getResource(
+		File t2 = new File(MergeTest.class.getResource(
 				"test-cases/merge/test4/t2.tf").toURI());
 
 		/* create temporary file for actual transaction file */

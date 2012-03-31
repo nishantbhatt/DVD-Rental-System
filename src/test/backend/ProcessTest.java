@@ -1,20 +1,15 @@
 package test.backend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import iodvd.MasterDVD;
 import iodvd.MasterDVDReader;
 import iodvd.iFileReader;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 
@@ -95,7 +90,7 @@ public class ProcessTest {
 
 	/* When one of the transaction file is not READABLE or NOT EXISTS */
 	@Test
-	public void testMerge3() throws IOException, URISyntaxException,
+	public void testProcess3() throws IOException, URISyntaxException,
 			ConstraintFailedException {
 		/* load the merged transaction file */
 		File mtf = new File(ProcessTest.class.getResource(
@@ -116,7 +111,7 @@ public class ProcessTest {
 	}
 
 	@Test
-	public void testMerge4() throws IOException, URISyntaxException,
+	public void testProcess4() throws IOException, URISyntaxException,
 			ConstraintFailedException {
 		/* load the merged transaction file */
 		File mtf = new File(ProcessTest.class.getResource(
@@ -138,22 +133,24 @@ public class ProcessTest {
 	}
 
 	@Test
-	public void testMerge5() throws IOException, URISyntaxException,
+	public void testProcess5() throws IOException, URISyntaxException,
 			ConstraintFailedException, DataFormatException {
 		/* load the merged transaction file */
 		File mtf = new File(ProcessTest.class.getResource(
-				"test-cases/process/test4/mtf.tf").toURI());
+				"test-cases/process/test5/mtf.tf").toURI());
 
 		/* load the merged transaction file */
 		File omf = new File(ProcessTest.class.getResource(
-				"test-cases/process/test4/omf.txt").toURI());
+				"test-cases/process/test5/omf.txt").toURI());
 
+		File nomf = new File(ProcessTest.class.getResource("test-cases/process/test5/nomf.txt").toURI());
+		
 		Set<MasterDVD> masterDVD;
 		/* process the result */
 		masterDVD = backEnd.process(mtf.getAbsolutePath(),
 				omf.getAbsolutePath());
 		
-		assertListContained(new MasterDVDReader(new FileReader("")), masterDVD);
+		assertListContained(new MasterDVDReader(new FileReader(nomf)), masterDVD);
 	}
 
 	public static void assertListContained(iFileReader<MasterDVD> expected,
@@ -165,7 +162,7 @@ public class ProcessTest {
 			actual.remove(expectedLine);
 		}
 
-		assertTrue("Actual had more lines then the expected.",
+		assertTrue("Actual has more lines then the expected.",
 				actual.size() > 0);
 	}
 }
