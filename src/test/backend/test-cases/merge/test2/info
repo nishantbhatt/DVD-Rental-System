@@ -1,1 +1,1 @@
-Purpose: Test that merge transaction is successful and content of actual and expected merged transaction file is matching.
+Purpose: Test that merge transaction throws an exception for non-writable merged transaction file.
