@@ -126,7 +126,7 @@ public class BackEndEngine implements iBackEnd {
 		/* create reader for both transaction file and old master DVD file */
 		try {
 			ofr = new MasterDVDReader(new FileReader(masterDVDFile));
-		} catch (FileNotFoundException ex) {
+		} catch (IOException ex) {
 			throw new FatalBackEndException("Old Master DVD file not found.",
 					FileType.OldMasterDVD, masterDVDFile);
 		}
